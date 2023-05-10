@@ -4,16 +4,11 @@ import numpy as np
 import pandas as pd
 import json
 
-
-from faker import Faker
-
 from mlp import generateNetwork
 
 app = Flask(__name__)
 #CORS(app)
 
-fake = Faker()
-synthetic = fake.name()
 
 
 

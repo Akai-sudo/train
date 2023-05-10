@@ -4,7 +4,7 @@ import pandas as pd
 
 def generateSyntheticData():
     fake = Faker()
-    synthetic = fake.name()
+    #synthetic = fake.name()
     dataframe = pd.DataFrame(
     [
         {

@@ -56,7 +56,8 @@
   align-content: flex-start; */
 
   font-size: calc(10px + 2vmin);
-  color: rgb(231, 132, 45);
+  /* color: rgb(231, 132, 45); */
+  color: #E7842D;
 }
 
 .App-link {
