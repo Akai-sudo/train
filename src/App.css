@@ -1,5 +1,43 @@
 .App {
   text-align: center;
+  font-family: 'Satoshi', sans-serif;
+
+}
+
+.font-link {
+  font-family: 'Satoshi', sans-serif;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+.title {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 200%;
+  color: #989898;
+
+  margin: 1%;
+  padding: 1%;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+  align-items: flex-start;
+  align-content: center;
+}
+
+.carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 }
 
 .App-logo {
@@ -7,25 +45,55 @@
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
-  background-color: #282c34;
+  background-color: #353535;
   min-height: 100vh;
-  display: flex;
+
+  /* display: flex;
   flex-direction: column;
+  justify-content: start;
   align-items: center;
-  justify-content: center;
+  align-content: flex-start; */
+
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: rgb(231, 132, 45);
 }
 
 .App-link {
   color: #61dafb;
+}
+
+.animation-wrapper {
+  width: 50%;
+  padding-bottom: 50%;
+}
+
+.sphere-animation {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 580px;
+  height: 580px;
+  margin: -290px 0 0 -290px;
+}
+
+.sphere path {
+  fill: url(#sphereGradient);
+  stroke-width: 1px;
+  stroke: rgba(80, 80, 80, .35);
+  backface-visibility: hidden;
+}
+
+@media (min-width: 500px) {
+  .sphere path {
+    stroke-width: .4px;
+  }
+}
+
+/* @media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
 }
 
 @keyframes App-logo-spin {
@@ -35,4 +103,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
