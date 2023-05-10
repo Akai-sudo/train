@@ -9,6 +9,8 @@ import { Canvas } from "@react-three/fiber";
 import Shape from "./Component/Shape";
 import ColorSpace from "./Component/ColorSpace";
 
+import Loading from "./Component/Loading";
+
 import { useSpring, animated } from '@react-spring/web'
 
 import SlideButton from 'react-slide-button';
@@ -18,9 +20,9 @@ import { Stats, OrbitControls } from '@react-three/drei'
 
 
 export default function App() {
-  const [data, setData] = useState([])
+  const [data, setData] = useState(null)
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [colorspace, setColorspace] = useState([])
   const [reset, setReset] = useState(0);
   const [mount, setAnimationMount] = useState(false);
@@ -32,6 +34,7 @@ export default function App() {
 
   //sprint za text ani
   const titleProps = useSpring({
+    config: { duration: 500 },
     from: { opacity: -1, y: -500 },
     to: { opacity: 1, y: 0 }
   });
@@ -68,32 +71,33 @@ export default function App() {
   //   loop: true,
   // })
 
-  // useEffect(() => {
-  //   const makeAPICall = async () => {
-  //     setLoading(true);
-  //     await fetch('http://localhost:5000/', {
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Accept': 'application/json'
-  //       }
-  //     })
-  //       .then(res => res.json())
-  //       .then(data => {
-  //         const stringdata = JSON.stringify(data)
-  //         setData(stringdata);  //prej je blo data.data zrd unga header
-  //       }).catch((e) => {
-  //         console.log(e);
-  //       }).finally(() => {
-  //         setLoading(false);
-  //       });
-  //   }
-  //   makeAPICall();
-  //   console.log(data)
-  // }, [data])
+  useEffect(() => {
+    const makeAPICall = async () => {
+      //setLoading(true);
+      await fetch('http://localhost:5000/', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      })
+        .then(res => res.json())
+        .then(data => {
+          const stringdata = JSON.stringify(data)
+          setData(stringdata);  //prej je blo data.data zrd unga header
+        }).catch((e) => {
+          console.log(e);
+        })
+      // .finally(() => {
+      //   setLoading(false);
+      // });
+    }
+    makeAPICall();
+    console.log(data)
+  }, [])
 
-  //   if (loading) {
-  //     const loading = "Loading"
-  //     return loading;
+  // if (loading) {
+  //   const loading = "Loading"
+  //   return loading;
   // }
 
 
@@ -177,8 +181,11 @@ export default function App() {
           {/* <img src={logo} className="App-logo" alt="logo" /> */}
           <p>
             <code>Flask</code> is connected to backend.
-            We received the synthetic data: {data}
+            We received the synthetic data: {data ? data : <Loading />}
           </p>
+
+          <input type="range" min="1" max="100" defaultValue="50" className="slider" id="myRange"></input>
+
           <p>Choose visualization</p>
         </div>
 
