@@ -35,7 +35,8 @@ export default function App() {
   //sprint za text ani
   const titleProps = useSpring({
     config: { duration: 1000 },
-    from: { opacity: -1, y: -500 },
+    textShadow: `0 25px 50px -12px #000;`,
+    from: { opacity: 0, y: -30 },
     to: { opacity: 1, y: 0 }
   });
 
@@ -71,6 +72,22 @@ export default function App() {
   //   loop: true,
   // })
 
+  const wobble = useSpring({
+    config: { duration: 250 },
+    from: { y: -1, x: 0 },
+    to: async (next, cancel) => {
+      await next({ x: 0, y: -2 })
+      await next({ x: -1, y: -1 })
+      await next({ x: -2, y: 0 })
+      await next({ x: -1, y: 1 })
+      await next({ x: 0, y: 2 })
+      await next({ x: 1, y: 1 })
+      await next({ x: 2, y: 0 })
+      await next({ x: 1, y: -1 })
+    },
+    loop: true,
+  })
+
   useEffect(() => {
     const makeAPICall = async () => {
       //setLoading(true);
@@ -92,7 +109,7 @@ export default function App() {
       // });
     }
     makeAPICall();
-    console.log(data)
+    //console.log(data);
   }, [])
 
   // if (loading) {
@@ -161,33 +178,45 @@ export default function App() {
             <Shape position={[1.2, 0, 0]} />
           </Canvas> */}
 
-          <Canvas orthographic camera={{ zoom: 50, position: [0, 0, 100] }}>
-            <ambientLight intensity={0.5} />
-            <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-            <pointLight position={[-10, -10, -10]} />
-            <ColorSpace position={[-1.2, 0, 0]} />
-            <OrbitControls />
-          </Canvas>
-
-          <div>
-
-          </div>
-
         </div>
 
         {/* <SlideButton mainText="Move epoch" overlayText="Epochs done!"></SlideButton> */}
 
         <div className="subscreen">
           {/* <img src={logo} className="App-logo" alt="logo" /> */}
-          <p>
-            <code>Flask</code> is connected to backend.
-            We received the synthetic data: {data ? data : <Loading />}
-          </p>
+          <div>
+            Hello
+          </div>
 
-          <input type="range" min="1" max="100" defaultValue="50" className="slider"></input>
+          <div>
+            {/* <code>Flask</code> is connected to backend. */}
+            <Canvas orthographic camera={{ zoom: 50, position: [0, 0, 100] }}>
+              <ambientLight intensity={0.5} />
+              <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+              <pointLight position={[-10, -10, -10]} />
+              <ColorSpace position={[-1.2, 0, 0]} />
+              <OrbitControls />
+            </Canvas>
+            {/* We received the synthetic data: {data ? data : <Loading />} */}
+          </div>
 
-          <p>Choose visualization</p>
+          <div>
+            <b>Neural Network parameters: </b>
+            <ul>
+              <li>Epoch: </li>
+              <li>Learning rate: </li>
+              <li>Loss rate: </li>
+              <li></li>
+              <li></li>
+              <li></li>
+            </ul>
+          </div>
         </div>
+
+
+        <input type="range" min="1" max="100" defaultValue="50" className="slider"></input>
+
+        <p>Choose visualization</p>
 
         <div className="carousel">
           <div>
@@ -201,6 +230,7 @@ export default function App() {
                 borderRadius: 100,
 
                 ...carouselspring,
+                ...wobble,
               }}
             />
           </div>

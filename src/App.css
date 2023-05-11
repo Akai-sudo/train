@@ -20,7 +20,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 200%;
   color: #989898;
-  text-shadow: 0 25px 50px -12px rgba(0, 0, 0, 1);
+  text-shadow: 0 25px 50px -12px rgb(193, 33, 33);
   margin: 1%;
   padding: 1%;
 }
@@ -31,6 +31,14 @@
   justify-content: right;
   align-items: flex-start;
   align-content: center;
+}
+
+.subscreen {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em;
 }
 
 .carousel {
