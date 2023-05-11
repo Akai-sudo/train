@@ -20,7 +20,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 200%;
   color: #989898;
-
+  text-shadow: 0 25px 50px -12px rgba(0, 0, 0, 1);
   margin: 1%;
   padding: 1%;
 }
@@ -130,34 +130,48 @@
 
 .slider {
   -webkit-appearance: none;
-  width: 100%;
-  height: 25px;
-  background: #d3d3d3;
+  width: 35%;
+  height: 35px;
+  border-radius: 9999px;
+  background: rgb(152, 152, 152, 0.3);
+  box-shadow: 0 25px 50px -12px rgba(231, 132, 45, 0.3), inset 0 0 20px #626161, inset -60px 0 10px #E7842D, inset 60px 0 10px rgb(81, 81, 81);
+  /* inner white */
+  ;
   outline: none;
-  opacity: 0.7;
+  padding: 0 0.5em;
   -webkit-transition: .2s;
   transition: opacity .2s;
 }
 
 .slider:hover {
-  opacity: 1;
+  opacity: 0.85;
 }
 
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 25px;
+  width: 40px;
   border-radius: 9999px;
   height: 25px;
-  background: #04AA6D;
+  opacity: 0.7;
+  background: #ffffff;
   cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  background: #E7842D;
 }
 
 .slider::-moz-range-thumb {
   width: 25px;
   height: 25px;
-  background: #04AA6D;
+  opacity: 0.7;
+  background: #ffffff;
   cursor: pointer;
+}
+
+.slider::-moz-range-thumb:hover {
+  background: #E7842D;
 }
 
 /* @media (prefers-reduced-motion: no-preference) {

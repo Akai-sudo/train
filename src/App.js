@@ -34,7 +34,7 @@ export default function App() {
 
   //sprint za text ani
   const titleProps = useSpring({
-    config: { duration: 500 },
+    config: { duration: 1000 },
     from: { opacity: -1, y: -500 },
     to: { opacity: 1, y: 0 }
   });
@@ -184,7 +184,7 @@ export default function App() {
             We received the synthetic data: {data ? data : <Loading />}
           </p>
 
-          <input type="range" min="1" max="100" defaultValue="50" className="slider" id="myRange"></input>
+          <input type="range" min="1" max="100" defaultValue="50" className="slider"></input>
 
           <p>Choose visualization</p>
         </div>
