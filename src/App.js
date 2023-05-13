@@ -1,22 +1,22 @@
 import { useRef, useEffect, useState } from "react";
 // import logo from "./logo.svg";
 import "./App.css";
-import anime from 'animejs';
-import Anime from "@mollycule/react-anime";
 
 import { Canvas } from "@react-three/fiber";
 
 import Shape from "./Component/Shape";
 import ColorSpace from "./Component/ColorSpace";
+import Chart from "./Component/Chart";
 
 import Loading from "./Component/Loading";
 
-import { useSpring, animated } from '@react-spring/web'
+import moize from 'moize';
 
-import SlideButton from 'react-slide-button';
+import { useSpring, animated } from '@react-spring/web'
 
 import * as THREE from "three";
 import { Stats, OrbitControls } from '@react-three/drei'
+import h337 from "heatmap.js";
 
 
 export default function App() {
@@ -88,6 +88,48 @@ export default function App() {
     loop: true,
   })
 
+  const functiondata = [{ name: 'Page A', uv: 100, pv: 2400, amt: 2400 }, { name: 'Page A', uv: 200, pv: 2400, amt: 2400 }, { name: 'Page A', uv: 300, pv: 2400, amt: 2400 }, { name: 'Page A', uv: 400, pv: 2400, amt: 2400 }];
+
+
+  // useEffect(() => {
+  //   var heatmapInstance = h337.create({
+  //     // only container is required, the rest will be defaults
+  //     container: document.querySelector('.Heatmap'),
+  //     backgroundColor: "#353535",
+  //     radius: 10,
+  //     maxOpacity: .5,
+  //     minOpacity: 0,
+  //     blur: .75
+
+
+  //   });
+  //   // now generate some random data
+  //   var points = [];
+  //   var max = 0;
+  //   var width = 840;
+  //   var height = 400;
+  //   var len = 200;
+
+  //   while (len--) {
+  //     var val = Math.floor(Math.random() * 100);
+  //     max = Math.max(max, val);
+  //     var point = {
+  //       x: Math.floor(Math.random() * width),
+  //       y: Math.floor(Math.random() * height),
+  //       value: val
+  //     };
+  //     points.push(point);
+  //   }
+  //   // heatmap data format
+  //   var data = {
+  //     max: max,
+  //     data: points
+  //   };
+  //   // if you have a set of datapoints always use setData instead of addData
+  //   // for data initialization
+  //   heatmapInstance.setData(data);
+  // })
+
   useEffect(() => {
     const makeAPICall = async () => {
       //setLoading(true);
@@ -100,6 +142,7 @@ export default function App() {
         .then(res => res.json())
         .then(data => {
           const stringdata = JSON.stringify(data)
+          localStorage.setItem('data', stringdata);
           setData(stringdata);  //prej je blo data.data zrd unga header
         }).catch((e) => {
           console.log(e);
@@ -180,12 +223,10 @@ export default function App() {
 
         </div>
 
-        {/* <SlideButton mainText="Move epoch" overlayText="Epochs done!"></SlideButton> */}
-
         <div className="subscreen">
           {/* <img src={logo} className="App-logo" alt="logo" /> */}
           <div>
-            Hello
+            The plot represents the loss function of our neural network.
           </div>
 
           <div>
@@ -197,18 +238,24 @@ export default function App() {
               <ColorSpace position={[-1.2, 0, 0]} />
               <OrbitControls />
             </Canvas>
-            {/* We received the synthetic data: {data ? data : <Loading />} */}
+            Data: {data ? data : <Loading />}
+
+            <div>
+              {/* <Canvas className="Heatmap" /> */}
+              <Chart data={functiondata} />
+            </div>
+
           </div>
 
           <div>
             <b>Neural Network parameters: </b>
             <ul>
               <li>Epoch: </li>
+              <li>Number of layers: </li>
+              <li>Number of weights per layer: </li>
               <li>Learning rate: </li>
               <li>Loss rate: </li>
-              <li></li>
-              <li></li>
-              <li></li>
+              <li>Dataset: </li>
             </ul>
           </div>
         </div>
@@ -218,8 +265,51 @@ export default function App() {
 
         <p>Choose visualization</p>
 
+        {/* <div class="radio-pillbox">
+          <radiogroup>
+          </radiogroup>
+
+        </div> */}
+
+        <div class="radio-pillbox">
+          <radiogroup>
+            <div>
+              <input type="radio" name="radio-group" className="js" value="JavaScript" class="first" />
+              <label for="js" class="radio-label">JavaScript</label>
+
+            </div>
+            <div>
+              <input type="radio" name="radio-group" className="html5" value="HTML5" />
+              <label for="tricky">HTML5</label>
+
+            </div>
+            <div>
+              <input type="radio" name="radio-group" className="css" value="CSS3" />
+              <label for="css">CSS/CSS3</label>
+
+            </div>
+            <div>
+              <input type="radio" name="radio-group" className="angularjs" value="AngularJS" />
+              <label for="angularjs">AngularJS</label>
+
+            </div>
+            <div>
+              <input type="radio" name="radio-group" className="jquery" value="jQuery" />
+              <label for="jquery">jQuery</label>
+
+            </div>
+            <div>
+              <input type="radio" name="radio-group" className="rn" value="React Native" class="last" />
+              <label for="rn">React Native</label>
+
+            </div>
+          </radiogroup>
+        </div>
+
         <div className="carousel">
           <div>
+
+
 
             <animated.div onClick={handleClick}
               style={{
