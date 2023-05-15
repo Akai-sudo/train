@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, Response, render_template
+from flask import jsonify
 from flask_cors import CORS, cross_origin
 import numpy as np
 import pandas as pd
@@ -7,11 +8,10 @@ import json
 from mlp import generateNetwork
 
 app = Flask(__name__)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 #CORS(app)
-
-
-
-
+cors = CORS(app, resources={r"/": {"origins": "*"}})
 
 # fake = Faker(['en_US', 'en_UK', 'it_IT', 'de_DE', 'fr_FR'], use_weighting=True)
 
@@ -25,19 +25,13 @@ app = Flask(__name__)
     # customers[i]['dob'] = fake.date()
     # customers[i]['note'] = fake.text().replace('\n', ' ')
     # customers.append(fake.name())
-
-
 #df = pd.DataFrame(customers).T
-
 #print(df)
 #df.to_csv('customer_data.csv', index=False)
 
-
-
-
-
 @app.route('/', methods=["GET"])
-@cross_origin() # allow all origins all methods
+#@cross_origin() # allow all origins all methods
+@cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
 def deploymlp():
     # response_body = {
     #     "name": "trAIn",
@@ -58,9 +52,14 @@ def deploymlp():
     networkparams = {}
     networkparams = generateNetwork()
 
+    #array = jsonify(networkparams) !!!!
+
     #response = jsonify(getlist(networkparams, type=int))
-    array = jsonify(networkparams)
     #response = array.tolist()
+
+    #response = flask.jsonify({'some': 'data'})
+    #array.headers.add('Access-Control-Allow-Origin', '*')
+    #return array
 
 
     #r = Response(response="TEST OK", status=200, mimetype="application/json")
@@ -74,6 +73,10 @@ def deploymlp():
     #     'message':'Success',
     #     'data': array
     # })
+
+    #!!!
+    #response = flask.jsonify()
+    #networkparams.headers.add('Access-Control-Allow-Origin', '*') TOLE NE DELA
     return networkparams  #tkole na tak način actually dela wtf
 
 

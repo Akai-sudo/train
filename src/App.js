@@ -10,7 +10,7 @@ import Chart from "./Component/Chart";
 
 import Loading from "./Component/Loading";
 
-import moize from 'moize';
+//import moize from 'moize';
 
 import { useSpring, animated } from '@react-spring/web'
 
@@ -23,10 +23,11 @@ export default function App() {
   const [data, setData] = useState(null)
 
   // const [loading, setLoading] = useState(false);
-  const [colorspace, setColorspace] = useState([])
-  const [reset, setReset] = useState(0);
-  const [mount, setAnimationMount] = useState(false);
+
   const [clicked, setClicked] = useState(false)
+
+  const [lossdata, setLossData] = useState([])
+
 
 
   //const canvasRef = useRef(null);
@@ -57,7 +58,7 @@ export default function App() {
     //menjava krogov na klik
   })
 
-  const handleClick = () => setClicked(s => !s)
+  //const handleClick = () => setClicked(s => !s)
 
 
   //tole je za te animated dva kvadratka k se premikata
@@ -88,7 +89,8 @@ export default function App() {
     loop: true,
   })
 
-  const functiondata = [{ name: 'Page A', uv: 100, pv: 2400, amt: 2400 }, { name: 'Page A', uv: 200, pv: 2400, amt: 2400 }, { name: 'Page A', uv: 300, pv: 2400, amt: 2400 }, { name: 'Page A', uv: 400, pv: 2400, amt: 2400 }];
+  //const functiondata = [{ name: 'Page A', w: 100, pv: 2400, amt: 2400 }, { name: 'Page A', w: 200, pv: 2400, amt: 2400 }, { name: 'Page A', w: 300, pv: 2400, amt: 2400 }, { name: 'Page A', w: 400, pv: 2400, amt: 2400 }];
+
 
 
   // useEffect(() => {
@@ -141,31 +143,30 @@ export default function App() {
       })
         .then(res => res.json())
         .then(data => {
-          const stringdata = JSON.stringify(data)
-          localStorage.setItem('data', stringdata);
-          setData(stringdata);  //prej je blo data.data zrd unga header
+          //const stringdata = JSON.stringify(data)
+          //localStorage.setItem('data', stringdata);
+          //console.log(data["neurons"])
+          //console.log(data["iter"])
+          //setData(stringdata);  //prej je blo data.data zrd unga header
+          //console.log(data["loss"])
+          setData(data)
+
+          console.log(data)
+
+          console.log("We got: ")
+          console.log(data ? data["loss"] : "/")
+
+          setLossData(data["loss"])
         }).catch((e) => {
           console.log(e);
         })
-      // .finally(() => {
-      //   setLoading(false);
-      // });
     }
     makeAPICall();
     //console.log(data);
   }, [])
 
-  // if (loading) {
-  //   const loading = "Loading"
-  //   return loading;
-  // }
-
-
-
-
-
-
-  // })();
+  console.log("ja brt: ")
+  console.log(data ? lossdata : 0)
 
   return (
     <div className="App">
@@ -238,11 +239,11 @@ export default function App() {
               <ColorSpace position={[-1.2, 0, 0]} />
               <OrbitControls />
             </Canvas>
-            Data: {data ? data : <Loading />}
+            Data: {data ? data["confusion"] : <Loading />}
 
             <div>
               {/* <Canvas className="Heatmap" /> */}
-              <Chart data={functiondata} />
+              <Chart data={data ? data["loss"] : 0} />
             </div>
 
           </div>
@@ -252,6 +253,7 @@ export default function App() {
             <ul>
               <li>Epoch: </li>
               <li>Number of layers: </li>
+              <li>Number of iterations: {data ? data["iter"] : <Loading />} </li>
               <li>Number of weights per layer: </li>
               <li>Learning rate: </li>
               <li>Loss rate: </li>
@@ -271,7 +273,7 @@ export default function App() {
 
         </div> */}
 
-        <div class="radio-pillbox">
+        {/* <div class="radio-pillbox">
           <radiogroup>
             <div>
               <input type="radio" name="radio-group" className="js" value="JavaScript" class="first" />
@@ -304,14 +306,14 @@ export default function App() {
 
             </div>
           </radiogroup>
-        </div>
+        </div> */}
 
         <div className="carousel">
           <div>
 
 
-
-            <animated.div onClick={handleClick}
+            {/* onClick={handleClick} */}
+            <animated.div
               style={{
                 width: 80,
                 height: 80,
@@ -325,9 +327,6 @@ export default function App() {
             />
           </div>
         </div>
-
-
-        {/* <div className="slider"/> */}
       </header>
     </div>
   );
