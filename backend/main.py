@@ -5,6 +5,13 @@ import numpy as np
 import pandas as pd
 import json
 
+# import os
+# from dotenv import load_dotenv
+
+# load_dotenv()
+
+# MY_ENV_VAR = os.getenv('MY_ENV_VAR')
+
 from mlp import generateNetwork
 
 app = Flask(__name__)
