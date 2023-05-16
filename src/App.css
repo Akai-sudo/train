@@ -14,6 +14,19 @@
   text-align: center;
 }
 
+ul.no-bullets {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.5em;
+  font-size: calc(10px + 1.1vmin);
+  ;
+  ;
+  /* Remove bullets */
+  /* display: inline-block; */
+}
+
 .radio-pillbox {
   height: 5em;
   width: 100%;
@@ -118,10 +131,10 @@
 
 .title {
   font-family: 'Satoshi', sans-serif;
-  font-size: 200%;
+  font-size: 1.7em;
   color: #989898;
   /* text-shadow: 0 25px 50px -12px rgb(193, 33, 33); */
-  text-shadow: 2px -1px 15px rgb(0, 0, 0);
+  text-shadow: 10px 2px 14px rgb(0, 0, 0);
   margin: 0 0 1em 0.3em;
   padding: 0.3em;
 }
@@ -139,6 +152,8 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  font-size: calc(10px + 1.5vmin);
+  ;
   padding: 1em;
 }
 

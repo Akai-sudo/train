@@ -3,6 +3,7 @@ import { useRef, useEffect, useState } from "react";
 import "./App.css";
 
 import { Canvas } from "@react-three/fiber";
+import ReactApexChart from 'react-apexcharts'
 
 import Shape from "./Component/Shape";
 import ColorSpace from "./Component/ColorSpace";
@@ -28,6 +29,56 @@ export default function App() {
 
   const [lossdata, setLossData] = useState([])
 
+  const [options, setOptions] = useState({
+    options: {
+      chart: {
+        height: 350,
+        type: 'heatmap',
+      },
+      dataLabels: {
+        enabled: false
+      },
+      colors: ["#008FFB"],
+      title: {
+        text: 'HeatMap Chart (Single color)'
+      },
+    },
+  })
+
+  const [series, setSeries] = useState([
+    {
+      name: "Series 1",
+      data: [{
+        x: 'W1',
+        y: 22
+      }, {
+        x: 'W2',
+        y: 29
+      }, {
+        x: 'W3',
+        y: 13
+      }, {
+        x: 'W4',
+        y: 32
+      }]
+    },
+    {
+      name: "Series 2",
+      data: [{
+        x: 'W1',
+        y: 43
+      }, {
+        x: 'W2',
+        y: 43
+      }, {
+        x: 'W3',
+        y: 43
+      }, {
+        x: 'W4',
+        y: 43
+      }]
+    }
+  ]);
 
 
   //const canvasRef = useRef(null);
@@ -89,7 +140,7 @@ export default function App() {
     loop: true,
   })
 
-  //const functiondata = [{ name: 'Page A', w: 100, pv: 2400, amt: 2400 }, { name: 'Page A', w: 200, pv: 2400, amt: 2400 }, { name: 'Page A', w: 300, pv: 2400, amt: 2400 }, { name: 'Page A', w: 400, pv: 2400, amt: 2400 }];
+  //const functiondata = [{w: 100, pv: 2400, amt: 2400 }, {w: 200, pv: 2400, amt: 2400 }, {w: 300, pv: 2400, amt: 2400 }, {w: 400, pv: 2400, amt: 2400 }];
 
 
 
@@ -168,6 +219,18 @@ export default function App() {
   console.log("ja brt: ")
   console.log(data ? lossdata : 0)
 
+  const lossy = lossdata;
+  // for (var i = 0; i < 10; i++) {
+  //   if (lossdata[i] !== undefined || lossdata[i] != null) {
+  //     lossy.push(data ? lossdata[i] : 0)
+  //   }
+  // }
+
+  console.log("Moj lossy je: " + lossy);
+
+  const lossyarray = lossy.map(x => ({ w: x }));
+
+
   return (
     <div className="App">
       <header className="App-header">
@@ -243,19 +306,25 @@ export default function App() {
 
             <div>
               {/* <Canvas className="Heatmap" /> */}
-              <Chart data={data ? data["loss"] : 0} />
+              <Chart data={lossyarray} />
+            </div>
+
+            <div>
+              {/* <ReactApexChart options={this.state.options} series={this.state.series} type="heatmap" height={350} /> */}
+
+              <ReactApexChart options={options} series={series} type="heatmap" />
             </div>
 
           </div>
 
           <div>
             <b>Neural Network parameters: </b>
-            <ul>
+            <ul className="no-bullets">
               <li>Epoch: </li>
               <li>Number of layers: </li>
               <li>Number of iterations: {data ? data["iter"] : <Loading />} </li>
               <li>Number of weights per layer: </li>
-              <li>Learning rate: </li>
+              <li>Accuracy: </li>
               <li>Loss rate: </li>
               <li>Dataset: </li>
             </ul>

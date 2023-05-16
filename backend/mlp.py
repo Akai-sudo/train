@@ -10,7 +10,7 @@ import sklearn.datasets as ds
 
 import pandas as pd
 
-
+from syndata import scale_data
 
 import json
 import numpy as np
@@ -21,7 +21,6 @@ from syndata import generateMoons, generateCircles
 
 
 class NumpyEncoder(json.JSONEncoder):
-    """Special json encoder for numpy types"""
 
     def default(self, obj):
         if isinstance(obj, np.integer):
@@ -87,7 +86,7 @@ def generateNetwork():
     #                    random_state=42)       
     # train_data, test_data, train_labels, test_labels = res  
 
-    max_iter = 500
+    max_iter = 2000
     neuron_num = 10
     X_train, X_test, y_train, y_test = train_test_split(features_x, labels_y, train_size=0.8, test_size=0.2, random_state=42)
     
@@ -115,7 +114,7 @@ def generateNetwork():
     # confusion_mat = confusion_matrix(y_test, y_pred)
     
     network_params['loss'] = MLP.loss_curve_ #če dam to v pd dataframe mi ustvar še indekse zravn tega
-    network_params['confusion'] = confusion_mat
+    # network_params['weights'] = scale_data(MLP.coefs_, [(33, 88), (12, 20)], inplace=True)
     network_params['iter'] = max_iter
     network_params['neurons'] =  neuron_num
     
