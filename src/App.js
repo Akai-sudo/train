@@ -3,11 +3,11 @@ import { useRef, useEffect, useState } from "react";
 import "./App.css";
 
 import { Canvas } from "@react-three/fiber";
-import ReactApexChart from 'react-apexcharts'
 
-import Shape from "./Component/Shape";
+//import Shape from "./Component/Shape";
 import ColorSpace from "./Component/ColorSpace";
 import Chart from "./Component/Chart";
+import Heatmap from "./Component/Heatmap";
 
 import Loading from "./Component/Loading";
 
@@ -16,8 +16,7 @@ import Loading from "./Component/Loading";
 import { useSpring, animated } from '@react-spring/web'
 
 import * as THREE from "three";
-import { Stats, OrbitControls } from '@react-three/drei'
-import h337 from "heatmap.js";
+import { OrbitControls } from '@react-three/drei'
 
 
 export default function App() {
@@ -313,7 +312,7 @@ export default function App() {
             <div>
               {/* <ReactApexChart options={this.state.options} series={this.state.series} type="heatmap" height={350} /> */}
 
-              <ReactApexChart options={options} series={series} type="heatmap" />
+              <Heatmap />
             </div>
 
           </div>

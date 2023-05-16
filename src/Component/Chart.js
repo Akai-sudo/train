@@ -5,7 +5,7 @@ export default function Chart({ data }) {
     //   { name: 'Page A', w: 200, pv: 2400, amt: 2400 }, 
     //   { name: 'Page A', w: 300, pv: 2400, amt: 2400 }, 
     //   { name: 'Page A', w: 400, pv: 2400, amt: 2400 }];
-    console.log("Naš chart ima data " + data)
+    //console.log("Naš chart ima data " + data)
 
     return (
         <LineChart width={600} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>

@@ -86,7 +86,7 @@ def generateNetwork():
     #                    random_state=42)       
     # train_data, test_data, train_labels, test_labels = res  
 
-    max_iter = 2000
+    max_iter = 3000
     neuron_num = 10
     X_train, X_test, y_train, y_test = train_test_split(features_x, labels_y, train_size=0.8, test_size=0.2, random_state=42)
     
