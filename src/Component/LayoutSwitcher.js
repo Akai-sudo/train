@@ -72,6 +72,11 @@ const LayoutSwitcher = (props) => {
 
     let LayoutComponent;
     if (selectedLayout === 'layout1') {
+        // if(props.data == null) {
+        //     LayoutComponent = <Loading/>
+        // } else {
+        //     LayoutComponent = <Layout1 />;
+        // }
         LayoutComponent = <Layout1 />;
     } else if (selectedLayout === 'layout2') {
         LayoutComponent = <Layout2 />;
@@ -105,6 +110,7 @@ const LayoutSwitcher = (props) => {
             <label className="radio"><input type="radio" value="layout2" checked={selectedLayout === 'layout2'} onChange={handleLayoutChange} /> Heatmap </label>
             <label className="radio"><input type="radio" value="layout3" checked={selectedLayout === 'layout3'} onChange={handleLayoutChange} /> L3</label>
             </div> */}
+            {/* {props.data ? LayoutComponent : <Loading/>} */}
             {LayoutComponent}
         </div>
     );

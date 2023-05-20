@@ -19,6 +19,7 @@ import { useSpring, animated } from '@react-spring/web'
 
 import { Globals } from "@react-spring/shared";
 import Slider from "./Component/Slider";
+import Params from "./Component/Params";
 
 // import * as THREE from "three";
 //import { OrbitControls } from '@react-three/drei'
@@ -169,7 +170,8 @@ export default function App() {
           }} /> */}
 
           {/* <LayoutSwitcher data={data ? data : 0} lossyarray={lossyarray ? lossyarray : []} /> */}
-          <LayoutSwitcher lossyarray={lossyarray} neurons={neurons} weights={weights} layers={layers} />
+
+          <LayoutSwitcher data={data} lossyarray={lossyarray} neurons={neurons} weights={weights} layers={layers} />
 
           {/* <Canvas>
             <pointLight position={[10, 10, 10]} />
@@ -178,41 +180,26 @@ export default function App() {
             <Shape position={[1.2, 0, 0]} />
           </Canvas> */}
 
-        </div>
+          <div className="subscreen">
+            {/* <img src={logo} className="App-logo" alt="logo" /> */}
 
-        <div className="subscreen">
-          {/* <img src={logo} className="App-logo" alt="logo" /> */}
-
-          <div>
-            {/* <code>Flask</code> is connected to backend. */}
-            {/* <Canvas orthographic camera={{ zoom: 50, position: [0, 0, 100] }}>
+            <div>
+              {/* <code>Flask</code> is connected to backend. */}
+              {/* <Canvas orthographic camera={{ zoom: 50, position: [0, 0, 100] }}>
               <ambientLight intensity={0.5} />
               <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
               <pointLight position={[-10, -10, -10]} />
               <ColorSpace position={[-1.2, 0, 0]} />
               <OrbitControls />
             </Canvas> */}
-            {/* {data ? LayoutSwitcher.layoutComponent : <Loading />} */}
+              {data ? LayoutSwitcher.layoutComponent : <Loading />}
+            </div>
+
+            {data ? <Params data={data} /> : <Loading />}
           </div>
 
-          <animated.div
-            style={{
-              ...opacityProps,
-            }}
-          >
-            <b>Neural Network parameters: </b>
-            <ul className="no-bullets">
-              <li>Epochs: {data ? data["epochs"] : <Loading />} </li>
-              <li>Batch size: {data ? data["batches"] : <Loading />}</li>
-              <li>Layers: {data ? data["layers"] : <Loading />}</li>
-              {/* <li>Number of iterations: {data ? data["iter"] : <Loading />} </li> */}
-              <li>Neurons per layer: {data ? data["neurons"] : <Loading />} </li>
-              {/* <li>Accuracy: </li>
-              <li>Loss rate: </li>
-              <li>Dataset: </li> */}
-            </ul>
-          </animated.div>
         </div>
+
 
 
         {/* <input type="range" ref="sliderRef" min="1" max="200" name="epoch" defaultValue="50" className="slider" /> */}

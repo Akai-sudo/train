@@ -10,7 +10,6 @@
 
 .visualization {
   width: 500px;
-  margin-right: 3em;
   /* margin: 10px 10px 10px 10px; */
 }
 
@@ -95,8 +94,11 @@ ul.no-bullets {
 
 .main {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: space-evenly;
 
 }
 
