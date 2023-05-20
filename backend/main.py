@@ -5,6 +5,8 @@ import numpy as np
 import pandas as pd
 import json
 
+#import requests
+
 # import os
 # from dotenv import load_dotenv
 
@@ -16,6 +18,7 @@ from mlp import generateNetwork
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
+
 
 #CORS(app)
 cors = CORS(app, resources={r"/": {"origins": "*"}})
@@ -36,9 +39,22 @@ cors = CORS(app, resources={r"/": {"origins": "*"}})
 #print(df)
 #df.to_csv('customer_data.csv', index=False)
 
+#za hosting na render.com
+# url = 'https://train-demo.onrender.com/'
+# response = requests.get(url)
+# if response.status_code == 200:
+#     # Successful request
+#     data = response.json()
+#     # Process the response data as needed
+# else:
+#     # Request failed
+#     print(f"Request failed with status code {response.status_code}")
+
+
+
 @app.route('/', methods=["GET"])
-#@cross_origin() # allow all origins all methods
-@cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
+@cross_origin() # allow all origins all methods
+#@cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
 def deploymlp():
     # response_body = {
     #     "name": "trAIn",

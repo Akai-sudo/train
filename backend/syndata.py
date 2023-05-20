@@ -3,6 +3,13 @@ import numpy as np
 import sklearn.datasets as ds
 #from flask_cors import CORS, cross_origin
 
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+
+#USE ONE OF THESE TO SCALE DATA
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
+
 from sklearn.datasets import make_classification
 
 def scale_data(data, new_limits, inplace=False ):
@@ -23,13 +30,19 @@ def scale_data(data, new_limits, inplace=False ):
 
 def generateMoons():
     features_x, labels_y = ds.make_moons(n_samples=100, shuffle=True, noise=0.03, random_state=10)
-    scale_data(features_x, [(33, 88), (12, 20)], inplace=True)
-    return features_x, labels_y
+
+    scaler = StandardScaler()
+    scaled_x = scaler.fit_transform(features_x)
+    #scale_data(features_x, [(33, 88), (12, 20)], inplace=True)
+    return scaled_x, labels_y
 
 def generateCircles():
     features_x, labels_y = ds.make_circles(n_samples=200,  shuffle=True, noise=0.01, random_state=40)
-    scale_data(features_x, [(33, 88), (12, 20)], inplace=True)
-    return features_x, labels_y
+
+    scaler = StandardScaler()
+    scaled_x = scaler.fit_transform(features_x)
+    #scale_data(features_x, [(33, 88), (12, 20)], inplace=True)
+    return scaled_x, labels_y
 
 def generateLine():
     return (
@@ -37,18 +50,18 @@ def generateLine():
         range(1000),
     )
 
-def generateSyntheticData():
-    fake = Faker()
-    # synthetic = fake.name()
-    dataframe = pd.DataFrame(
-        [
-            {
-                "name": fake.name(),
-                "address": fake.address(),
-                "birthday": fake.date_of_birth(),
-                "email": fake.email(),
-                "password": fake.password(),
-            }
-            for _ in range(100)
-        ]
-    )
+# def generateSyntheticData():
+#     fake = Faker()
+#     # synthetic = fake.name()
+#     dataframe = pd.DataFrame(
+#         [
+#             {
+#                 "name": fake.name(),
+#                 "address": fake.address(),
+#                 "birthday": fake.date_of_birth(),
+#                 "email": fake.email(),
+#                 "password": fake.password(),
+#             }
+#             for _ in range(100)
+#         ]
+#     )

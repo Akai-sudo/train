@@ -3,22 +3,32 @@ from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import confusion_matrix, accuracy_score
-
-from functools import partial
-
 import sklearn.datasets as ds
-
-import pandas as pd
-
-from syndata import scale_data
-
-import json
-import numpy as np
 
 from sklearn import linear_model
 
 from syndata import generateMoons, generateCircles
 
+# from keras.models import Sequential
+# from keras.layers import Dense
+import keras
+
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.callbacks import ModelCheckpoint
+#USE ONE OF THESE TO SCALE DATA
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
+
+
+from functools import partial
+
+
+import pandas as pd
+import json
+import numpy as np
+
+from syndata import scale_data
 
 class NumpyEncoder(json.JSONEncoder):
 
@@ -32,25 +42,25 @@ class NumpyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-def getLoss(neuralnet):
-    return neuralnet.loss_
+# def getLoss(neuralnet):
+#     return neuralnet.loss_
 
 
-def getBestLoss(neuralnet):
-    return neuralnet.best_loss_
+# def getBestLoss(neuralnet):
+#     return neuralnet.best_loss_
 
 
-def getFeatures(neuralnet):
-    return neuralnet.n_features_in_
+# def getFeatures(neuralnet):
+#     return neuralnet.n_features_in_
 
 
-weights_history = []
-loss_function = []
+# weights_history = []
+# loss_function = []
 
 
-def save_weights(model):
-    weights = model.coefs_
-    weights_history.append(weights)
+# def save_weights(model):
+#     weights = model.coefs_
+#     weights_history.append(weights)
 
 
 # fit_with_logging = partial(model.fit, callback=save_weights)
@@ -87,36 +97,116 @@ def generateNetwork():
     # train_data, test_data, train_labels, test_labels = res  
 
     max_iter = 3000
-    neuron_num = 10
+    neuron_num = 64
     X_train, X_test, y_train, y_test = train_test_split(features_x, labels_y, train_size=0.8, test_size=0.2, random_state=42)
-    
-    MLP = MLPClassifier(hidden_layer_sizes=(neuron_num, neuron_num, neuron_num), max_iter=max_iter)
-    
-    # for i in range(max_iter):
-    #     mlp.partial_fit(X, y, classes=[0, 1])
-    #     pred = mlp.predict(X)
-    #     errors.append(mean_absolute_error(y, pred))
 
-    MLP.fit(X_train, y_train)
+
+    #KERAS
+
+    # model = Sequential()
+    # model.add(Dense(16, activation='relu', input_dim=input_dim))  # First hidden layer
+    # model.add(Dense(16, activation='relu'))  # Second hidden layer
+    # model.add(Dense(output_dim, activation='softmax'))  # Output layer
+
+    # model = keras.Sequential(
+    # [
+    #     layers.Dense(2, activation="relu", name="layer1"),
+    #     layers.Dense(3, activation="relu", name="layer2"),
+    #     layers.Dense(4, name="layer3"),
+    # ]
+    # )
+
+
+
+    # Define your MLP model using Keras
+    model = Sequential()
+    model.add(Dense(neuron_num, activation='relu', input_dim=2))
+    model.add(Dense(neuron_num, activation='relu'))
+    model.add(Dense(1, activation='sigmoid'))
+
+    model.compile(optimizer='adam', loss='binary_crossentropy')
+
+    # Set up the ModelCheckpoint callback
+    # checkpoint = ModelCheckpoint(
+    #     'weights-{epoch:02d}.h5',
+    #     save_weights_only=True,
+    #     save_freq='epoch',
+    #     verbose=1
+    # )
+
+    # Create a list to store weight values at each epoch
+    weight_values = []
+
+    # Custom callback to store weights
+    class WeightRecorderCallback(keras.callbacks.Callback):
+        def on_epoch_end(self, epoch, logs=None):
+            weights = self.model.get_weights()
+            weight_values.append(weights)
+
+    #x_train, y_train = ds.make_moons(n_samples=100, shuffle=True, noise=0.03, random_state=10)
+
+    # x_train = np.reshape(x_train, (x_train.shape[0], 2))
+
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    scaler.fit(X_train)
+    scaled_x = scaler.transform(X_train)
+    #scaled_x = scaler.fit_transform(X_train)
+
+
+    # Set up your training loop
+    # x_train = ...  # Your training data
+    # y_train = ...  # Your training labels
+    epochs_num = 100
+    batch_size = 64
+
+    # Train the model with the callbacks
+    trained_model = model.fit(scaled_x, y_train, batch_size=batch_size, epochs=epochs_num, callbacks=[WeightRecorderCallback()])
+
+    loss_values = trained_model.history['loss']
+
+    #loss_function = model.loss
+    #print("Loss je: ", loss_values)
+
+    network_params['loss'] = loss_values
+    network_params['weights'] = np.array(weight_values)
+    network_params['neurons'] = neuron_num
+    network_params['epochs'] = epochs_num
+    network_params['layers'] = len(model.layers)
+    network_params['batches'] = batch_size
+
+    # Note: The number of batches is equal to number of iterations for one epoch.
+    #networks_params['iter'] = 
+
+
+
+    #sci-kit
+    # MLP = MLPClassifier(hidden_layer_sizes=(neuron_num, neuron_num, neuron_num), max_iter=max_iter)
+    
+    # # for i in range(max_iter):
+    # #     mlp.partial_fit(X, y, classes=[0, 1])
+    # #     pred = mlp.predict(X)
+    # #     errors.append(mean_absolute_error(y, pred))
+
+    # MLP.fit(X_train, y_train)
         
-    y_pred = MLP.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred) * 100
-    confusion_mat = confusion_matrix(y_test, y_pred)
-
-    #network_params_list.append()
-
-    # X_train, X_test, y_train, y_test = train_test_split(features_x, labels_y, train_size=0.8, test_size=0.2, random_state=42)
-    # mlp = MLPClassifier()
-    # mlp.fit(X_train, y_train)
-    
-    # y_pred = mlp.predict(X_test)
+    # y_pred = MLP.predict(X_test)
     # accuracy = accuracy_score(y_test, y_pred) * 100
     # confusion_mat = confusion_matrix(y_test, y_pred)
+
+    # #network_params_list.append()
+
+    # # X_train, X_test, y_train, y_test = train_test_split(features_x, labels_y, train_size=0.8, test_size=0.2, random_state=42)
+    # # mlp = MLPClassifier()
+    # # mlp.fit(X_train, y_train)
     
-    network_params['loss'] = MLP.loss_curve_ #če dam to v pd dataframe mi ustvar še indekse zravn tega
-    # network_params['weights'] = scale_data(MLP.coefs_, [(33, 88), (12, 20)], inplace=True)
-    network_params['iter'] = max_iter
-    network_params['neurons'] =  neuron_num
+    # # y_pred = mlp.predict(X_test)
+    # # accuracy = accuracy_score(y_test, y_pred) * 100
+    # # confusion_mat = confusion_matrix(y_test, y_pred)
+    
+    # network_params['loss'] = MLP.loss_curve_ #če dam to v pd dataframe mi ustvar še indekse zravn tega
+    # # network_params['weights'] = scale_data(MLP.coefs_, [(33, 88), (12, 20)], inplace=True)
+    # network_params['iter'] = max_iter
+    # network_params['neurons'] =  neuron_num
     
     dumped = json.dumps(network_params, cls=NumpyEncoder)
 
