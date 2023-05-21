@@ -31,7 +31,6 @@ libclang==16.0.0
 Markdown==3.4.3
 MarkupSafe==2.1.2
 matplotlib==3.5.3
-ml-dtypes==0.0.4
 numpy==1.21.6
 oauthlib==3.2.2
 opt-einsum==3.3.0
