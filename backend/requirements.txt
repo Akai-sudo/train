@@ -32,7 +32,7 @@ Markdown==3.4.3
 MarkupSafe==2.1.2
 matplotlib==3.5.3
 ml-dtypes==0.1.0
-numpy==1.23.5
+numpy==1.21.6
 oauthlib==3.2.2
 opt-einsum==3.3.0
 packaging==23.1
