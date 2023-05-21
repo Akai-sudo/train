@@ -65,3 +65,4 @@ urllib3==1.26.15
 virtualenv==20.23.0
 Werkzeug==2.2.3
 wrapt==1.14.1
+wheel==0.40.0
