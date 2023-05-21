@@ -1,0 +1,17 @@
+/build
+/node_modules
+
+# Python
+__pycache__/
+*.pyc
+
+/__pycache__
+*.pyc
+
+/env
+
+# Environment variables
+env/
+# Ignore other files
+.env
+.DS_Store
