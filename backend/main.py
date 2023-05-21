@@ -16,8 +16,6 @@ import json
 
 from mlp import generateNetwork
 
-from app.wsgi import app
-
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
