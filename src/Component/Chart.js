@@ -8,7 +8,7 @@ export default function Chart({ data }) {
     //console.log("Naš chart ima data " + data)
 
     return (
-        <LineChart width={600} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+        <LineChart width={600} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 10 }}>
             <Line type="monotone" dataKey="w" stroke="#E7842D" strokeWidth={1.5} dot={false} />
             {/* <CartesianGrid stroke="#ccc" strokeDasharray="10 10" /> */}
             <XAxis dataKey="name" />

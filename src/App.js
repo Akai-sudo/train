@@ -30,6 +30,7 @@ Globals.assign({
 
 
 export default function App() {
+  console.log(process.env.REACT_APP_URL)
   const [data, setData] = useState(null)
 
   //const [clicked, setClicked] = useState(false)
@@ -74,7 +75,7 @@ export default function App() {
   useEffect(() => {
     const makeAPICall = async () => {
       //setLoading(true);
-      await fetch('http://localhost:5000/', {
+      await fetch(process.env.REACT_APP_URL, {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'

@@ -85,7 +85,7 @@ const LayoutSwitcher = (props) => {
     }
 
     return(
-        <div>
+        <div className="layout-container">
             <animated.div
                 style={{
                     ...opacityProps,

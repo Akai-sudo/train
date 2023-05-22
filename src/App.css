@@ -13,6 +13,12 @@
   /* margin: 10px 10px 10px 10px; */
 }
 
+.layout-container {
+  height: 500px;
+  max-width: 500px;
+  width: 100%;
+}
+
 /* .props {
   
 } */
