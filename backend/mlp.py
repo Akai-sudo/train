@@ -1,27 +1,25 @@
-# frame za večnivojski perceptron
 from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split
-from sklearn.neural_network import MLPClassifier
-from sklearn.metrics import confusion_matrix, accuracy_score
-import sklearn.datasets as ds
-
-from sklearn import linear_model
+# from sklearn.neural_network import MLPClassifier
+# from sklearn.metrics import confusion_matrix, accuracy_score
+# import sklearn.datasets as ds
+# from sklearn import linear_model
 
 from syndata import generateMoons, generateCircles
 
 # from keras.models import Sequential
 # from keras.layers import Dense
 import keras
-
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.callbacks import ModelCheckpoint
+
 #USE ONE OF THESE TO SCALE DATA
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
 
 
-from functools import partial
+#from functools import partial
 
 
 import pandas as pd
@@ -42,30 +40,6 @@ class NumpyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-# def getLoss(neuralnet):
-#     return neuralnet.loss_
-
-
-# def getBestLoss(neuralnet):
-#     return neuralnet.best_loss_
-
-
-# def getFeatures(neuralnet):
-#     return neuralnet.n_features_in_
-
-
-# weights_history = []
-# loss_function = []
-
-
-# def save_weights(model):
-#     weights = model.coefs_
-#     weights_history.append(weights)
-
-
-# fit_with_logging = partial(model.fit, callback=save_weights)
-# fit_with_logging(X, y)
-
 # def linearReg():
 #     regression_model = linear_model.LinearRegression()
 
@@ -77,8 +51,8 @@ class NumpyEncoder(json.JSONEncoder):
 # number of iterations = number of passes, each pass using [batch size] number of examples. To be clear, one pass = one forward pass + one backward pass (we do not count the forward pass and backward pass as two different passes).
 
 def generateNetwork(dataset):
-    #dataset = load_digits()
-
+    max_iter = 3000
+    neuron_num = 64
     network_params = {}
     #features_x, labels_y
     features_x = []
@@ -98,26 +72,11 @@ def generateNetwork(dataset):
     #     # For example, you can return an error message indicating that the dataset is not available.
     #     return "DATASET ERROR!"
 
-
-
-    #features_x, labels_y = generateMoons()
-
-    # a to rabim - data preprocessing
-    # X = dataset.iloc[:,:-1].values  #independent variable array
-    # y = dataset.iloc[:,1].values  #dependent variable vector
-
-    # res = train_test_split(data, labels, 
-    #                    train_size=0.8,
-    #                    test_size=0.2,
-    #                    random_state=42)       
-    # train_data, test_data, train_labels, test_labels = res  
-
-    max_iter = 3000
-    neuron_num = 64
+    
     X_train, X_test, y_train, y_test = train_test_split(features_x, labels_y, train_size=0.8, test_size=0.2, random_state=42)
 
 
-    #KERAS
+    #MLP KERAS
 
     # model = Sequential()
     # model.add(Dense(16, activation='relu', input_dim=input_dim))  # First hidden layer
@@ -132,9 +91,6 @@ def generateNetwork(dataset):
     # ]
     # )
 
-
-
-    # Define your MLP model using Keras
     model = Sequential()
     model.add(Dense(neuron_num, activation='relu', input_dim=2))
     model.add(Dense(neuron_num, activation='relu'))
@@ -150,18 +106,13 @@ def generateNetwork(dataset):
     #     verbose=1
     # )
 
-    # Create a list to store weight values at each epoch
     weight_values = []
-    #dict_values = {}
 
-    # Custom callback to store weights
+
     class WeightRecorderCallback(keras.callbacks.Callback):
-        #counter = 0
 
         def on_epoch_end(self, epoch, logs=None):
             weights = self.model.get_weights()
-            #dict_values[counter] = weights
-            #counter = counter + 1
             weight_values.append(weights)
 
     #x_train, y_train = ds.make_moons(n_samples=100, shuffle=True, noise=0.03, random_state=10)
@@ -178,10 +129,9 @@ def generateNetwork(dataset):
     # x_train = ...  # Your training data
     # y_train = ...  # Your training labels
     epochs_num = 100
-    batch_size = 64
+    batch_size = 32
 
-    # Train the model with the callbacks
-    trained_model = model.fit(scaled_x, y_train, epochs=epochs_num, callbacks=[WeightRecorderCallback()])
+    trained_model = model.fit(scaled_x, y_train, batch_size=batch_size, epochs=epochs_num, callbacks=[WeightRecorderCallback()])
 
     loss_values = trained_model.history['loss']
 
@@ -197,39 +147,8 @@ def generateNetwork(dataset):
     network_params['layers'] = len(model.layers)
     network_params['batches'] = batch_size
 
-    # Note: The number of batches is equal to number of iterations for one epoch.
-    #networks_params['iter'] = 
-
-
-
-    #sci-kit
-    # MLP = MLPClassifier(hidden_layer_sizes=(neuron_num, neuron_num, neuron_num), max_iter=max_iter)
+    # num of batches is equal to number of iterations for one epoch
     
-    # # for i in range(max_iter):
-    # #     mlp.partial_fit(X, y, classes=[0, 1])
-    # #     pred = mlp.predict(X)
-    # #     errors.append(mean_absolute_error(y, pred))
-
-    # MLP.fit(X_train, y_train)
-        
-    # y_pred = MLP.predict(X_test)
-    # accuracy = accuracy_score(y_test, y_pred) * 100
-    # confusion_mat = confusion_matrix(y_test, y_pred)
-
-    # #network_params_list.append()
-
-    # # X_train, X_test, y_train, y_test = train_test_split(features_x, labels_y, train_size=0.8, test_size=0.2, random_state=42)
-    # # mlp = MLPClassifier()
-    # # mlp.fit(X_train, y_train)
-    
-    # # y_pred = mlp.predict(X_test)
-    # # accuracy = accuracy_score(y_test, y_pred) * 100
-    # # confusion_mat = confusion_matrix(y_test, y_pred)
-    
-    # network_params['loss'] = MLP.loss_curve_ #če dam to v pd dataframe mi ustvar še indekse zravn tega
-    # # network_params['weights'] = scale_data(MLP.coefs_, [(33, 88), (12, 20)], inplace=True)
-    # network_params['iter'] = max_iter
-    # network_params['neurons'] =  neuron_num
     
     dumped = json.dumps(network_params, cls=NumpyEncoder)
 
