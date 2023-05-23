@@ -10,7 +10,9 @@ from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
 
-from sklearn.datasets import make_classification
+# from sklearn.datasets import make_classification
+# from sklearn.datasets import make_moons
+# from sklearn.datasets import make_circles
 
 def scale_data(data, new_limits, inplace=False ):
     if not inplace:
@@ -33,7 +35,6 @@ def generateMoons():
 
     scaler = StandardScaler()
     scaled_x = scaler.fit_transform(features_x)
-    #scale_data(features_x, [(33, 88), (12, 20)], inplace=True)
     return scaled_x, labels_y
 
 def generateCircles():
@@ -41,7 +42,12 @@ def generateCircles():
 
     scaler = StandardScaler()
     scaled_x = scaler.fit_transform(features_x)
-    #scale_data(features_x, [(33, 88), (12, 20)], inplace=True)
+    return scaled_x, labels_y
+
+def generateClass():
+    features_x, labels_y = ds.make_classification(n_samples=300,  shuffle=True, noise=0.01, random_state=10)
+    scaler = StandardScaler()
+    scaled_x = scaler.fit_transform(features_x)
     return scaled_x, labels_y
 
 def generateLine():

@@ -32,7 +32,7 @@ Globals.assign({
 
 
 export default function App() {
-  console.log(process.env.REACT_APP_URL)
+  //console.log(process.env.REACT_APP_URL)
   const [data, setData] = useState(null)
 
   //const [clicked, setClicked] = useState(false)
@@ -169,41 +169,10 @@ export default function App() {
           </div>
         </div>
 
-        {/* <canvas ref={canvasRef} /> */}
-
-        {/* 
-          <animated.div
-            style={{
-              width: 80,
-              height: 80,
-              background: '#ff6d6d',
-              borderRadius: 8,
-              ...springs,
-            }}
-          />
-        </div> */}
-
 
         <div className="main">
 
-          {/* <animated.div style={{
-            width: 80,
-            height: 80,
-            background: '#ff6d6d',
-            borderRadius: 8,
-            ...springs,
-          }} /> */}
-
-          {/* <LayoutSwitcher data={data ? data : 0} lossyarray={lossyarray ? lossyarray : []} /> */}
-
           <LayoutSwitcher data={data} lossyarray={lossyarray} neurons={neurons} weights={weights} layers={layers} />
-
-          {/* <Canvas>
-            <pointLight position={[10, 10, 10]} />
-            <ambientLight />
-            <Shape position={[-1.2, 0, 0]} />
-            <Shape position={[1.2, 0, 0]} />
-          </Canvas> */}
 
           <div className="subscreen">
             {/* <img src={logo} className="App-logo" alt="logo" /> */}
