@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Loading from "./Loading";
 import Heatmap from "./Heatmap";
 import Chart from "./Chart";
+import Space from "./Space";
 
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
@@ -25,7 +26,9 @@ const LayoutSwitcher = (props) => {
     // const weights = props.weights
 
 
+    // PROBABLY MORM DT USESTATE ZA ŠT NEURONOV DA NISO UNDEFINED
 
+    
     const [selectedLayout, setSelectedLayout] = useState('layout1');
     const handleLayoutChange = (event) => {
         //console.log("changed!")
@@ -66,7 +69,11 @@ const LayoutSwitcher = (props) => {
     };
 
     const Layout3 = () => {
-        return <div>This is Layout 3</div>;
+        return (
+            <div>
+            { props.neurons ? <Space neurons={props.neurons}/> : <Loading/> }
+            </div>
+        );
     };
 
 

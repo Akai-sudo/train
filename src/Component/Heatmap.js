@@ -39,7 +39,7 @@ export default function Heatmap(props) {
         // },
         plotOptions: {
             heatmap: {
-                radius: 30,
+                radius: 9999,
                 enableShades: true,
                 inverse: true,
                 colorScale: {
@@ -108,7 +108,7 @@ export default function Heatmap(props) {
             show: false,
         },
         dataLabels: {
-            enabled: false
+            enabled: true,
         },
         title: {
             text: 'Weight values',
@@ -145,6 +145,14 @@ export default function Heatmap(props) {
             min: 0
         }
     });
+
+    // const [series, setSeries] = useState(
+    //     [
+
+    //     ]
+
+
+    // );
 
     const [series, setSeries] = useState(
 

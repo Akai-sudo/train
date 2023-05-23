@@ -111,17 +111,20 @@ export default function App() {
   //     lossy.push(data ? lossdata[i] : 0)
   //   }
   // }
-
+  console.log(weights)
   //console.log("Moj lossy je: " + lossy);
 
   const lossyarray = lossy.map(x => ({ w: x }));
-  console.log(lossyarray)
+
+  //console.log(lossyarray)
   // const weightsarray = weights.map((x, i) => ({ x: `W${i + 1}` }))
   // console.log("UTEŽI: " + weightsarray[1])
   // console.log("NYA " + weights)
   // const lossdataarray = Object.values(lossdata)
   // console.log("nima " + weights)
   // console.log("alo " + lossdataarray)
+
+
 
   return (
     <div className="App">

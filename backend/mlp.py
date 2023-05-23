@@ -136,11 +136,16 @@ def generateNetwork():
 
     # Create a list to store weight values at each epoch
     weight_values = []
+    #dict_values = {}
 
     # Custom callback to store weights
     class WeightRecorderCallback(keras.callbacks.Callback):
+        #counter = 0
+
         def on_epoch_end(self, epoch, logs=None):
             weights = self.model.get_weights()
+            #dict_values[counter] = weights
+            #counter = counter + 1
             weight_values.append(weights)
 
     #x_train, y_train = ds.make_moons(n_samples=100, shuffle=True, noise=0.03, random_state=10)
@@ -167,8 +172,10 @@ def generateNetwork():
     #loss_function = model.loss
     #print("Loss je: ", loss_values)
 
+    weight_values = np.array(weight_values, dtype=object)
+
     network_params['loss'] = loss_values
-    network_params['weights'] = np.array(weight_values)
+    network_params['weights'] = weight_values
     network_params['neurons'] = neuron_num
     network_params['epochs'] = epochs_num
     network_params['layers'] = len(model.layers)
