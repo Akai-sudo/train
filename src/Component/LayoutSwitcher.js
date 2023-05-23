@@ -13,6 +13,8 @@ import { useSpring, animated } from '@react-spring/web';
 const LayoutSwitcher = (props) => {
    //const lossyarray = props;
     //console.log(data)
+    //const weights = props ? props.weights : 0
+
     const opacityProps = useSpring({
         config: { duration: 1000 },
         textShadow: `0 25px 50px -12px #000;`,

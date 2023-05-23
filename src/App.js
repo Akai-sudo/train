@@ -124,7 +124,7 @@ export default function App() {
     //console.log(data);
   }, [selectedDataset])
 
-  console.log("LOSS: " + lossdata)
+  //console.log("LOSS: " + lossdata)
 
   const lossy = lossdata;
   // for (var i = 0; i < 10; i++) {
@@ -136,6 +136,8 @@ export default function App() {
   //console.log("Moj lossy je: " + lossy);
 
   const lossyarray = lossy.map(x => ({ w: x }));
+
+  console.log(weights)
 
   //console.log(lossyarray)
   // const weightsarray = weights.map((x, i) => ({ x: `W${i + 1}` }))
