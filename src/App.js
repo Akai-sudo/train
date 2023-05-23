@@ -17,6 +17,8 @@ import LayoutSwitcher from "./Component/LayoutSwitcher"
 
 import { useSpring, animated } from '@react-spring/web'
 
+import Dropdown from 'react-bootstrap/Dropdown';
+
 import { Globals } from "@react-spring/shared";
 import Slider from "./Component/Slider";
 import Params from "./Component/Params";
@@ -42,7 +44,22 @@ export default function App() {
   const [neurons, setNeurons] = useState(0)
 
 
+  const [selectedDataset, setDataset] = useState('moons')
 
+
+  // const datasetHandler = (event) => {
+  //     console.log("changed!")
+  //     setDataset(event.target.value);
+  //     console.log(selectedDataset);
+  // };
+
+  const datasetHandler = (dataset) => {
+
+    setDataset(dataset);
+  };
+
+  console.log(selectedDataset)
+  console.log(JSON.stringify({ selectedDataset }))
   //const sliderRef = useRef();
 
   // function LayoutView(props) {
@@ -76,10 +93,12 @@ export default function App() {
     const makeAPICall = async () => {
       //setLoading(true);
       await fetch(process.env.REACT_APP_URL, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
+        body: JSON.stringify({ selectedDataset }),
         mode: 'cors'
       })
         .then(res => res.json())
@@ -103,7 +122,9 @@ export default function App() {
     }
     makeAPICall();
     //console.log(data);
-  }, [])
+  }, [selectedDataset])
+
+  console.log("LOSS: " + lossdata)
 
   const lossy = lossdata;
   // for (var i = 0; i < 10; i++) {
@@ -187,6 +208,19 @@ export default function App() {
           <div className="subscreen">
             {/* <img src={logo} className="App-logo" alt="logo" /> */}
 
+            <animated.div
+              style={{
+                ...opacityProps,
+              }}
+            >
+              <div>
+                <Dropdown.Menu show>
+                  <Dropdown.Header>Choose dataset</Dropdown.Header>
+                  <Dropdown.Item eventKey="2" value="moons" onClick={() => datasetHandler('moons')}>Moons</Dropdown.Item>
+                  <Dropdown.Item eventKey="3" value="circles" onClick={() => datasetHandler('circles')}>Circles</Dropdown.Item>
+                </Dropdown.Menu>
+              </div>
+            </animated.div>
             <div>
               {/* <code>Flask</code> is connected to backend. */}
               {/* <Canvas orthographic camera={{ zoom: 50, position: [0, 0, 100] }}>

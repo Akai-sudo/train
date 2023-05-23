@@ -76,15 +76,31 @@ class NumpyEncoder(json.JSONEncoder):
 # batch size = the number of training examples in one forward/backward pass. The higher the batch size, the more memory space you'll need.
 # number of iterations = number of passes, each pass using [batch size] number of examples. To be clear, one pass = one forward pass + one backward pass (we do not count the forward pass and backward pass as two different passes).
 
-def generateNetwork():
+def generateNetwork(dataset):
     #dataset = load_digits()
 
     network_params = {}
+    #features_x, labels_y
+    features_x = []
+    labels_y = []
 
     #network_params_list = []; 
+    if dataset == "circles":
+        print("WE WANT CIRCLES")
+        features_x, labels_y = generateCircles()
+    elif dataset == "moons":
+        print("WE WANT MOONS")
+        features_x, labels_y = generateMoons()
+
+    # if not features_x or not labels_y:
+    #     # Handle the case when features_x or labels_y is empty
+    #     # You can raise an exception, return an error response, or handle it in a different way based on your requirements.
+    #     # For example, you can return an error message indicating that the dataset is not available.
+    #     return "DATASET ERROR!"
 
 
-    features_x, labels_y = generateMoons()
+
+    #features_x, labels_y = generateMoons()
 
     # a to rabim - data preprocessing
     # X = dataset.iloc[:,:-1].values  #independent variable array
@@ -165,7 +181,7 @@ def generateNetwork():
     batch_size = 64
 
     # Train the model with the callbacks
-    trained_model = model.fit(scaled_x, y_train, batch_size=batch_size, epochs=epochs_num, callbacks=[WeightRecorderCallback()])
+    trained_model = model.fit(scaled_x, y_train, epochs=epochs_num, callbacks=[WeightRecorderCallback()])
 
     loss_values = trained_model.history['loss']
 

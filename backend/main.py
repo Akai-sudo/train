@@ -1,5 +1,4 @@
-from flask import Flask, jsonify, Response, render_template
-from flask import jsonify
+from flask import Flask, jsonify, Response, render_template, request
 from flask_cors import CORS, cross_origin
 import numpy as np
 import pandas as pd
@@ -52,7 +51,7 @@ cors = CORS(app, resources={r"/": {"origins": "*"}})
 
 
 
-@app.route('/', methods=["GET"])
+@app.route('/', methods=["GET", "POST"])
 @cross_origin() # allow all origins all methods
 #@cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
 def deploymlp():
@@ -64,6 +63,9 @@ def deploymlp():
     # response.headers.add("Access-Control-Allow-Origin", "*")
     # return response
 
+    dataset = request.json.get('selectedDataset')
+
+    print("We want dataset: ", dataset)
     # dataset = load_digits()
     # x_train, x_test, y_train, y_test = train_test_split(dataset.data, dataset.target, test_size=0.20, random_state=4)
     # NN = MLPClassifier()
@@ -73,7 +75,7 @@ def deploymlp():
     # accuracy = accuracy_score(y_test,y_pred)*100
     # confusion_mat = confusion_matrix(y_test,y_pred)
     networkparams = {}
-    networkparams = generateNetwork()
+    networkparams = generateNetwork(dataset)
 
     #array = jsonify(networkparams) !!!!
 

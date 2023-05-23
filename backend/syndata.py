@@ -29,7 +29,7 @@ def scale_data(data, new_limits, inplace=False ):
         return data
 
 def generateMoons():
-    features_x, labels_y = ds.make_moons(n_samples=100, shuffle=True, noise=0.03, random_state=10)
+    features_x, labels_y = ds.make_moons(n_samples=300, shuffle=True, noise=0.03, random_state=10)
 
     scaler = StandardScaler()
     scaled_x = scaler.fit_transform(features_x)
@@ -37,7 +37,7 @@ def generateMoons():
     return scaled_x, labels_y
 
 def generateCircles():
-    features_x, labels_y = ds.make_circles(n_samples=200,  shuffle=True, noise=0.01, random_state=40)
+    features_x, labels_y = ds.make_circles(n_samples=300,  shuffle=True, noise=0.01, random_state=10)
 
     scaler = StandardScaler()
     scaled_x = scaler.fit_transform(features_x)
