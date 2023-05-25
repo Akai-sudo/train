@@ -162,8 +162,14 @@ ul.no-bullets {
   margin: -290px 0 0 -290px;
 }
 
+.loaderClass {
+
+  padding: 1px;
+}
+
 .bouncing-loader {
   display: inline-flex;
+  flex-direction: row-reverse;
   justify-content: center;
 }
 

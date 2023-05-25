@@ -13,14 +13,11 @@ import keras
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.callbacks import ModelCheckpoint
+from keras.callbacks import LambdaCallback
 
 #USE ONE OF THESE TO SCALE DATA
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
-
-
-#from functools import partial
-
 
 import pandas as pd
 import json
@@ -42,8 +39,6 @@ class NumpyEncoder(json.JSONEncoder):
 
 # def linearReg():
 #     regression_model = linear_model.LinearRegression()
-
-
 # In the neural network terminology:
 
 # one epoch = ONE FORWARD PASS AND ONE BACKWARD PASS of all the training examples
@@ -60,10 +55,10 @@ def generateNetwork(dataset):
 
     #network_params_list = []; 
     if dataset == "circles":
-        print("WE WANT CIRCLES")
+        print("circles")
         features_x, labels_y = generateCircles()
     elif dataset == "moons":
-        print("WE WANT MOONS")
+        print("moons")
         features_x, labels_y = generateMoons()
 
     # if not features_x or not labels_y:
@@ -108,12 +103,19 @@ def generateNetwork(dataset):
 
     weight_values = []
 
+    #print_weights = LambdaCallback(on_epoch_end=lambda batch, logs: print(model.layers[0].get_weights()))
 
-    class WeightRecorderCallback(keras.callbacks.Callback):
+    weights_dict = {}
 
-        def on_epoch_end(self, epoch, logs=None):
-            weights = self.model.get_weights()
-            weight_values.append(weights)
+    weight_callback = LambdaCallback \
+    ( on_epoch_end=lambda epoch, logs: weights_dict.update({epoch:model.get_weights()}))
+
+
+    # class WeightSaveCallback(keras.callbacks.Callback):
+
+    #     def on_epoch_end(self, epoch, logs=None):
+    #         weights = self.model.get_weights()
+    #         weight_values.append(weights)
 
     #x_train, y_train = ds.make_moons(n_samples=100, shuffle=True, noise=0.03, random_state=10)
 
@@ -128,11 +130,17 @@ def generateNetwork(dataset):
     # Set up your training loop
     # x_train = ...  # Your training data
     # y_train = ...  # Your training labels
-    epochs_num = 100
+    epochs_num = 100 #200 dela bolš za curve od circles
     batch_size = 32
 
-    trained_model = model.fit(scaled_x, y_train, batch_size=batch_size, epochs=epochs_num, callbacks=[WeightRecorderCallback()])
+    trained_model = model.fit(scaled_x, y_train, batch_size=batch_size, epochs=epochs_num, callbacks=weight_callback)
 
+      # retrive weights
+    # for epoch,weights in weights_dict.items():
+    #     print("Weights for 2nd Layer of epoch #",epoch+1)
+    #     print(weights[2])
+    #     print("Bias for 2nd Layer of epoch #",epoch+1)
+    #     print(weights[3])
     loss_values = trained_model.history['loss']
 
     #loss_function = model.loss
@@ -141,7 +149,7 @@ def generateNetwork(dataset):
     weight_values = np.array(weight_values, dtype=object)
 
     network_params['loss'] = loss_values
-    network_params['weights'] = weight_values
+    network_params['weights'] = weights_dict
     network_params['neurons'] = neuron_num
     network_params['epochs'] = epochs_num
     network_params['layers'] = len(model.layers)

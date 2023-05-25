@@ -9,9 +9,10 @@ export default function Heatmap(props) {
     const weights = props.weights
     const layers = props.layers
     const neurons = props.neurons
+    console.log(weights)
 
     //console.log(weights[0])
-    //console.log("alo" + weights[0].length)
+    //console.log("alo" + weights[0])
     // const seriesNames = props.layers;
     // const values = props.weights;
 
@@ -21,6 +22,19 @@ export default function Heatmap(props) {
     //         data: values[index].map((value, i) => ({ x: `W${i + 1}`, y: value }))
     //     }));
     //     console.log(dataStructure)
+    // }
+
+    // const eachEpoch = []
+    // for (let i = 0; i < 5; i++) {
+    //     eachEpoch.push()
+    // }
+
+    // const arrWeights = []
+    // for(let i = 0; i < weights.length; i++) {
+    //     for (let j = 0; j < weights[i].length; j++) {
+
+    //     }
+
     // }
 
     const [series, setSeries] = useState(
@@ -38,24 +52,38 @@ export default function Heatmap(props) {
     // console.log(mappedWeights);
 
     // setSeries(mappedWeights);
-
     useEffect(() => {
 
-        const mappedWeights = []
+        const mappedWeights = [];
         for (let i = 0; i < weights[0].length; i++) {
-
-            // mappedWeights.push({
-            //     name: `Layer ${i + 1}`, data: [{ x: `W${i + 1}`, w: weights[0][i] }]
-            // });
-            mappedWeights.push({
-                name: `Layer ${i + 1}`,
-                data: weights[0][i].map((value, j) => ({ x: `W${j + 1}`, y: value }))
-            });
+            const layerWeights = [];
+            for (let j = 0; j < weights.length; j++) {
+                layerWeights.push({ x: `W${j + 1}`, y: weights[0][j] });
+            }
+            mappedWeights.push({ name: `Layer ${i + 1}`, data: layerWeights });
         }
-        console.log(mappedWeights)
 
-        setSeries(mappedWeights);
+        // mappedWeights.push({
+        //     name: `Layer ${i + 1}`, data: [{ x: `W${i + 1}`, w: weights[0][i] }]
+        // });
+        // for (let i = 0; i < weights[0].length; i++) {
+        //     mappedWeights.push({
+        //         name: `Layer ${i + 1}`,
+        //         data: weights[0][i].map((value, j) => ({ x: `W${j + 1}`, y: value }))
+        //     });
+        //     setSeries(mappedWeights);
+        // }
+        // mappedWeights.push({
+        //     name: `Layer ${i + 1}`,
+        //     data: weights[0][i].map((value, j) => ({ x: `W${j + 1}`, y: value }))
+        // });
+
+        //     console.log(mappedWeights)
+
+        //     //setSeries(mappedWeights);
+        // }, []);
     }, []);
+
 
 
 
@@ -114,7 +142,7 @@ export default function Heatmap(props) {
     const [options, setOptions] = useState({
         chart: {
             height: 500,
-            width: 1000,
+            width: 5000,
             type: 'heatmap',
             background: '#353535', // Set the background color here
         },
@@ -132,7 +160,7 @@ export default function Heatmap(props) {
         // },
         plotOptions: {
             heatmap: {
-                radius: 9999,
+                radius: 0,
                 enableShades: true,
                 inverse: true,
                 colorScale: {
@@ -163,7 +191,7 @@ export default function Heatmap(props) {
                         },
                         {
                             from: 0,
-                            to: 1,
+                            to: 100,
                             color: "#E7842D" // #E7842D color at value 1 to 100
                         }
                     ]

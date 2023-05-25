@@ -175,6 +175,7 @@ export default function App() {
         <div className="main">
 
           <LayoutSwitcher data={data} lossyarray={lossyarray} neurons={neurons} weights={weights} layers={layers} />
+          {data ? LayoutSwitcher.layoutComponent : <Loading />}
 
           <div className="subscreen">
             {/* <img src={logo} className="App-logo" alt="logo" /> */}
@@ -201,7 +202,7 @@ export default function App() {
               <ColorSpace position={[-1.2, 0, 0]} />
               <OrbitControls />
             </Canvas> */}
-              {data ? LayoutSwitcher.layoutComponent : <Loading />}
+
             </div>
 
             {data ? <Params data={data} /> : <Loading />}
