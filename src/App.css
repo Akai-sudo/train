@@ -164,7 +164,7 @@ ul.no-bullets {
 
 .loaderClass {
 
-  padding: 1px;
+  padding-top: 3em;
 }
 
 .bouncing-loader {
@@ -212,6 +212,10 @@ ul.no-bullets {
     stroke-width: .4px;
   }
 } */
+
+.visualizationRadio {
+  box-shadow: 0 25px 50px -12px rgba(231, 132, 45, 0.3), inset 0 0 20px #626161;
+}
 
 
 .slidecontainer {

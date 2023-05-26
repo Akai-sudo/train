@@ -1,14 +1,28 @@
-import { useState } from "react";
+import React, { useState, useCallback } from "react";
 
-export default function Slider() {
+const Slider = React.memo(({ onSliderValueChange }) => {
     const [sliderValue, setSliderValue] = useState(50);
-    const handleSliderChange = (event) => {
+
+    // const handleSliderChange = (event) => {
+    //     const value = event.target.value;
+    //     setSliderValue(value);
+    //     onSliderValueChange(value);
+    // };
+    const handleSliderChange = useCallback((event) => {
         const value = event.target.value;
         setSliderValue(value);
-        //updateData(value);
-        console.log("Changed! " + value)
-    };
+        onSliderValueChange(value);
+    }, [onSliderValueChange]);
+
     return (
-        <input type="range" min="1" max="100" name="epoch" value={sliderValue} onChange={handleSliderChange} className="slider" />
+        <input
+            type="range"
+            min="0" max="99"
+            name="epoch"
+            value={sliderValue}
+            onChange={handleSliderChange}
+            className="slider" />
     );
-}
+});
+
+export default Slider;

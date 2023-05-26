@@ -7,11 +7,15 @@ from sklearn.model_selection import train_test_split
 
 from syndata import generateMoons, generateCircles
 
+from keras.constraints import Constraint
+import keras.backend as K
+
+
 # from keras.models import Sequential
 # from keras.layers import Dense
 import keras
 from keras.models import Sequential
-from keras.layers import Dense
+from keras.layers import Dense, GlobalAveragePooling1D, Flatten
 from keras.callbacks import ModelCheckpoint
 from keras.callbacks import LambdaCallback
 
@@ -24,6 +28,18 @@ import json
 import numpy as np
 
 from syndata import scale_data
+
+class Between(Constraint):
+    def __init__(self, min_value, max_value):
+        self.min_value = min_value
+        self.max_value = max_value
+
+    def __call__(self, w):        
+        return K.clip(w, self.min_value, self.max_value)
+
+    def get_config(self):
+        return {'min_value': self.min_value,
+                'max_value': self.max_value}
 
 class NumpyEncoder(json.JSONEncoder):
 
@@ -87,8 +103,9 @@ def generateNetwork(dataset):
     # )
 
     model = Sequential()
-    model.add(Dense(neuron_num, activation='relu', input_dim=2))
-    model.add(Dense(neuron_num, activation='relu'))
+    model.add(Dense(neuron_num, kernel_constraint=Between(-1,1), activation='relu', input_dim=2))
+    model.add(Dense(neuron_num,kernel_constraint=Between(-1,1), activation='relu'))
+    #model.add(GlobalAveragePooling1D(3)(3))
     model.add(Dense(1, activation='sigmoid'))
 
     model.compile(optimizer='adam', loss='binary_crossentropy')

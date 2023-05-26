@@ -17,7 +17,6 @@ import LayoutSwitcher from "./Component/LayoutSwitcher"
 
 import { useSpring, animated } from '@react-spring/web'
 
-import Dropdown from 'react-bootstrap/Dropdown';
 
 import { Globals } from "@react-spring/shared";
 import Slider from "./Component/Slider";
@@ -89,6 +88,12 @@ export default function App() {
     to: { opacity: 1, x: 0 }
   });
 
+  const [externalValue, setExternalValue] = useState(50);
+
+  const handleSliderValueChange = (value) => {
+    setExternalValue(value);
+  };
+
   useEffect(() => {
     const makeAPICall = async () => {
       //setLoading(true);
@@ -124,6 +129,8 @@ export default function App() {
     //console.log(data);
   }, [selectedDataset])
 
+
+
   //console.log("LOSS: " + lossdata)
 
   const lossy = lossdata;
@@ -132,12 +139,11 @@ export default function App() {
   //     lossy.push(data ? lossdata[i] : 0)
   //   }
   // }
-  console.log(weights)
   //console.log("Moj lossy je: " + lossy);
 
   const lossyarray = lossy.map(x => ({ w: x }));
 
-  console.log(weights)
+  //console.log(weights)
 
   //console.log(lossyarray)
   // const weightsarray = weights.map((x, i) => ({ x: `W${i + 1}` }))
@@ -146,8 +152,7 @@ export default function App() {
   // const lossdataarray = Object.values(lossdata)
   // console.log("nima " + weights)
   // console.log("alo " + lossdataarray)
-
-
+  //console.log("Tsdf" + externalValue)
 
   return (
     <div className="App">
@@ -174,8 +179,8 @@ export default function App() {
 
         <div className="main">
 
-          <LayoutSwitcher data={data} lossyarray={lossyarray} neurons={neurons} weights={weights} layers={layers} />
-          {data ? LayoutSwitcher.layoutComponent : <Loading />}
+          <LayoutSwitcher slider={externalValue} data={data} lossyarray={lossyarray} neurons={neurons} weights={weights} layers={layers} />
+          {LayoutSwitcher.layoutComponent}
 
           <div className="subscreen">
             {/* <img src={logo} className="App-logo" alt="logo" /> */}
@@ -185,13 +190,7 @@ export default function App() {
                 ...opacityProps,
               }}
             >
-              <div>
-                <Dropdown.Menu show>
-                  <Dropdown.Header>Choose dataset</Dropdown.Header>
-                  <Dropdown.Item eventKey="2" value="moons" onClick={() => datasetHandler('moons')}>Moons</Dropdown.Item>
-                  <Dropdown.Item eventKey="3" value="circles" onClick={() => datasetHandler('circles')}>Circles</Dropdown.Item>
-                </Dropdown.Menu>
-              </div>
+
             </animated.div>
             <div>
               {/* <code>Flask</code> is connected to backend. */}
@@ -213,7 +212,7 @@ export default function App() {
 
 
         {/* <input type="range" ref="sliderRef" min="1" max="200" name="epoch" defaultValue="50" className="slider" /> */}
-        <Slider />
+        <Slider onSliderValueChange={handleSliderValueChange} />
 
       </header>
     </div>
