@@ -1,0 +1,17 @@
+<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="7" y="9" width="9.14286" height="13.7143" fill="white"/>
+<rect x="20.7143" y="27.2857" width="9.14286" height="13.7143" fill="white"/>
+<rect x="34.4286" y="9" width="9.14286" height="13.7143" fill="white"/>
+<line x1="21.2143" y1="9" x2="21.2143" y2="22.7143" stroke="white"/>
+<line x1="29.8571" y1="9.5" x2="20.7143" y2="9.5" stroke="white"/>
+<line x1="29.2143" y1="9" x2="29.2143" y2="22.7143" stroke="white"/>
+<line x1="20.7143" y1="22.2143" x2="29.8571" y2="22.2143" stroke="white"/>
+<line x1="34.9286" y1="27.2857" x2="34.9286" y2="41" stroke="white"/>
+<line x1="43.5714" y1="27.7857" x2="34.4286" y2="27.7857" stroke="white"/>
+<line x1="42.9286" y1="27.2857" x2="42.9286" y2="41" stroke="white"/>
+<line x1="34.4286" y1="40.5" x2="43.5714" y2="40.5" stroke="white"/>
+<line x1="7.5" y1="27.2857" x2="7.5" y2="41" stroke="white"/>
+<line x1="16.1429" y1="27.7857" x2="7" y2="27.7857" stroke="white"/>
+<line x1="15.5" y1="27.2857" x2="15.5" y2="41" stroke="white"/>
+<line x1="7" y1="40.5" x2="16.1429" y2="40.5" stroke="white"/>
+</svg>

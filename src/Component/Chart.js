@@ -8,10 +8,12 @@ export default function Chart({ data }) {
     //console.log("Naš chart ima data " + data)
 
     return (
-        <LineChart width={700} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 10 }}>
+        <LineChart width={600} height={300} data={data} margin={{ top: 20, right: 20, bottom: 0, left: 100 }}>
             <Line type="monotone" dataKey="w" stroke="#E7842D" strokeWidth={1.5} dot={false} />
             {/* <CartesianGrid stroke="#ccc" strokeDasharray="10 10" /> */}
-            <XAxis dataKey="name" />
+            <XAxis dataKey="name"
+
+            />
             <YAxis type="number"
                 tickFormatter={(value) => value.toFixed(2)} />
         </LineChart>);

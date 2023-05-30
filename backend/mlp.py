@@ -52,6 +52,106 @@ class NumpyEncoder(json.JSONEncoder):
             return obj.tolist()
         return json.JSONEncoder.default(self, obj)
 
+# def scale_data(data, new_limits, inplace=False ):
+#     if not inplace:
+#         data = data.copy()
+#     min_x, min_y = np.ndarray.min(data[:,0]), np.ndarray.min(data[:,1])
+#     max_x, max_y = np.ndarray.max(data[:,0]), np.ndarray.max(data[:,1])
+#     min_x_new, max_x_new = new_limits[-1]
+#     min_y_new, max_y_new = new_limits[1]
+
+#     data -= np.array([min_x, min_y]) 
+#     data *= np.array([(max_x_new - min_x_new) / (max_x - min_x), (max_y_new - min_y_new) / (max_y - min_y)])
+#     data += np.array([min_x_new, min_y_new]) 
+#     if inplace:
+#         return None
+#     else:
+#         return data
+
+def extract_relu_activations(epoch_activations):
+    relu_activations = []
+    for activation in epoch_activations:
+        relu_activation = np.maximum(activation, 0)
+        relu_activations.append(relu_activation)
+    return relu_activations
+
+# def neuron_weights_callback(epoch, logs, model, weights_dict):
+#     layer_index = 0
+#     layer_dict = {}
+#     for layer in model.layers:
+#         if isinstance(layer, keras.layers.Dense):
+#             weights = layer.get_weights()[0]  # Get the weight matrix of the layer
+#             neuron_index = 0
+#             for neuron_weights in weights.T:
+#                 key = f"({layer_index}, {neuron_index})"
+#                 layer_dict[key] = neuron_weights.tolist()
+                
+#                 neuron_index += 1
+#         layer_index += 1
+#     weights_dict.update({epoch:layer_dict})
+
+
+
+# def neuron_weights_callback(epoch, logs, model, weights_dict):
+
+#     weights = [layer.get_weights() for layer in model.layers]
+#     #weights_dict[epoch] = weights
+#     weights_dict.update({epoch:weights})
+    # epoch = int(epoch)
+    # if epoch not in weights_dict:
+    #     weights_dict[epoch] = {}
+
+    # for layer_index, layer in enumerate(model.layers):
+    #     if isinstance(layer, Dense):
+    #         weights = layer.get_weights()[0]  # Get the weight matrix of the layer
+    #         neuron_weights = weights.T.tolist()  # Transpose and convert to a list
+
+    #         layer_name = f"layer_{layer_index}"
+    #         weights_dict[epoch][layer_name] = neuron_weights
+
+
+    # for layer in model.layers:
+    #     if isinstance(layer, Dense):
+    #         weights = layer.get_weights()[0]  # Get the weight matrix of the layer
+    #         neuron_weights_per_layer = weights.T.tolist()
+    #         weights_dict[epoch].append(neuron_weights_per_layer)
+
+#magnitude_dict = {}
+
+def neuron_weights_callback(epoch, logs, model, magnitudes_dict):
+    # if epoch not in magnitudes_dict:
+    #     magnitudes_dict[epoch] = {}
+    layer_index = 0
+    for layer in model.layers:
+        if isinstance(layer, Dense):
+            if epoch not in magnitudes_dict:
+                magnitudes_dict[epoch] = {}
+            # if layer_index not in magnitudes_dict[epoch]:
+            #     magnitudes_dict[epoch][layer_index] = []
+
+            weights = layer.get_weights()[0]
+            weight_magnitudes = weights.mean(axis=0).tolist()
+
+            magnitudes_dict[epoch][layer_index] = weight_magnitudes
+        layer_index += 1
+    
+    # currentLayer = 0
+    # for layer in model.layers:
+    #     if isinstance(layer, Dense):
+            
+    #         weights = layer.get_weights()[0]  # Get the weight matrix of the layer
+    #         weights_in_layer = weights.T.tolist()
+    #         #weights_dict.update({epoch:weights})
+    #         # reshaped_weights = weights.T.reshape(-1)
+    #         weights_dict[epoch] = weights.tolist()
+    #         currentLayer += 1
+    #         #neuron_index = 0
+    #         # for neuron_weights in weights.T.reshape(-1):
+    #         #     weights_dict[epoch].update({currentLayer, neuron_weights})
+    #         #     #weights_dict[(currentLayer, neuron_index)] = neuron_weights.tolist()
+                
+    #         #     neuron_index += 1
+    #     #currentLayer += 1
 
 # def linearReg():
 #     regression_model = linear_model.LinearRegression()
@@ -63,7 +163,7 @@ class NumpyEncoder(json.JSONEncoder):
 
 def generateNetwork(dataset):
     max_iter = 3000
-    neuron_num = 64
+    neuron_num = 32
     network_params = {}
     #features_x, labels_y
     features_x = []
@@ -119,38 +219,43 @@ def generateNetwork(dataset):
     # )
 
     weight_values = []
+    relu_activations = []
+
+    # def neuron_weights_callback(epoch, logs, model, weights_dict):
+    #     layer_index = 0
+    #     for layer in model.layers:
+    #         if isinstance(layer, keras.layers.Dense):
+    #             weights = layer.get_weights()[0]  # Get the weight matrix of the layer
+    #             neuron_index = 0
+    #             for neuron_weights in weights.T:
+    #                 weights_dict[(layer_index, neuron_index)] = neuron_weights.tolist()
+    #                 neuron_index += 1
+    #         layer_index += 1
 
     #print_weights = LambdaCallback(on_epoch_end=lambda batch, logs: print(model.layers[0].get_weights()))
 
     weights_dict = {}
+    magnitudes_dict = {}
 
-    weight_callback = LambdaCallback \
-    ( on_epoch_end=lambda epoch, logs: weights_dict.update({epoch:model.get_weights()}))
+    # weight_callback = LambdaCallback \
+    # ( on_epoch_end=lambda epoch, logs: weights_dict.update({epoch:model.get_weights()}))
 
+    # weight_callback = LambdaCallback(on_epoch_end=lambda epoch, logs: neuron_weights_callback(epoch, logs, model, weights_dict)
+    # )
 
-    # class WeightSaveCallback(keras.callbacks.Callback):
+    weight_callback = LambdaCallback(on_epoch_end=lambda epoch, logs: neuron_weights_callback(epoch, logs, model, magnitudes_dict))
 
-    #     def on_epoch_end(self, epoch, logs=None):
-    #         weights = self.model.get_weights()
-    #         weight_values.append(weights)
-
-    #x_train, y_train = ds.make_moons(n_samples=100, shuffle=True, noise=0.03, random_state=10)
-
-    # x_train = np.reshape(x_train, (x_train.shape[0], 2))
+    activation_callback = LambdaCallback(on_epoch_end=lambda epoch, logs: relu_activations.append(extract_relu_activations(K.function([model.layers[0].input], [model.layers[0].output])([X_train]))))
 
     scaler = MinMaxScaler(feature_range=(0, 1))
     scaler.fit(X_train)
     scaled_x = scaler.transform(X_train)
     #scaled_x = scaler.fit_transform(X_train)
 
-
-    # Set up your training loop
-    # x_train = ...  # Your training data
-    # y_train = ...  # Your training labels
     epochs_num = 100 #200 dela bolš za curve od circles
     batch_size = 32
 
-    trained_model = model.fit(scaled_x, y_train, batch_size=batch_size, epochs=epochs_num, callbacks=weight_callback)
+    trained_model = model.fit(scaled_x, y_train, batch_size=batch_size, epochs=epochs_num, callbacks=[weight_callback, activation_callback])
 
       # retrive weights
     # for epoch,weights in weights_dict.items():
@@ -160,13 +265,14 @@ def generateNetwork(dataset):
     #     print(weights[3])
     loss_values = trained_model.history['loss']
 
-    #loss_function = model.loss
-    #print("Loss je: ", loss_values)
+    #weights_dict_str_keys = {str(epoch): weights for epoch, weights in weights_dict.items()}
+    weights_array = np.array(list(weights_dict.values()))
 
     weight_values = np.array(weight_values, dtype=object)
 
     network_params['loss'] = loss_values
-    network_params['weights'] = weights_dict
+    network_params['weights'] = magnitudes_dict
+    network_params['activations'] = relu_activations
     network_params['neurons'] = neuron_num
     network_params['epochs'] = epochs_num
     network_params['layers'] = len(model.layers)
@@ -189,19 +295,4 @@ def generateNetwork(dataset):
     # y_pred = regressor.predict(X_test)
     # print(y_pred)
     ### END Linear regressor
-
-    # NN = MLPClassifier()
-    # NN.fit(x_train, y_train)
-    # y_pred = NN.predict(x_test)
-
-    # attributes = {}
-    # attributes = getLoss(NN)
-
-    # accuracy = accuracy_score(y_test, y_pred) * 100
-    # confusion_mat = confusion_matrix(y_test, y_pred)
-
-
-
-    # dumped = json.dumps(confusion_mat, cls=NumpyEncoder)
-    #dumped.headers.add('Access-Control-Allow-Origin', '*') 
     return dumped

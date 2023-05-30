@@ -6,10 +6,6 @@ import { interpolateRgb } from 'd3-interpolate';
 
 import Slider from './Slider';
 
-import { createContext, useContext } from 'react';
-
-
-
 function Heatmap(props) {
     //const SeriesContext = createContext();
     const weights = props.weights
@@ -17,58 +13,77 @@ function Heatmap(props) {
     const neurons = props.neurons
     const slider = props.slider
 
-    //const prevSliderRef = useRef()
-    //console.log("SLIDER" + slider)
-    //console.log(weights)
+    const currentEpoch = weights[slider]
 
-    //console.log(weights[0])
-    //console.log("alo" + weights[0])
-    // const seriesNames = props.layers;
-    // const values = props.weights;
-
-    // if (values !== undefined) {
-    //     const dataStructure = seriesNames.map((name, index) => ({
-    //         name,
-    //         data: values[index].map((value, i) => ({ x: `W${i + 1}`, y: value }))
-    //     }));
-    //     console.log(dataStructure)
-    // }
-
-    // const eachEpoch = []
-    // for (let i = 0; i < 5; i++) {
-    //     eachEpoch.push()
-    // }
-
-    // const arrWeights = []
-    // for(let i = 0; i < weights.length; i++) {
-    //     for (let j = 0; j < weights[i].length; j++) {
-
-    //     }
-
-    // }
-
-    // function useSeriesContext() {
-    //     const context = useContext(SeriesContext);
-    //     if (!context) {
-    //         throw new Error('useSeriesContext must be used within a SeriesContext.Provider');
-    //     }
-    //     return context;
-    // }
+    //console.log("Current epoch:", slider)
+    //console.log(currentEpoch)
 
     // function convertRange(value, r1, r2) {
     //     return (value - r1[0]) * (r2[1] - r2[0]) / (r1[1] - r1[0]) + r2[0];
     // }
+    // function scale_interval(array) {
+    //     // //const flat_magnitudes = magnitudes.flat();
+    //     // let min = -1;
+    //     // let max = 1;
+    //     // for (let row of magnitudes) {
+    //     //     for (let value of row) {
+    //     //         if (value < min) {
+    //     //             min = value;
+    //     //         }
+    //     //         if (value > max) {
+    //     //             max = value;
+    //     //         }
+    //     //     }
+    //     // }
+    //     // const range = max - min
+    //     // //const scaled_magnitude = ((magnitudes - min) / range) * 2 - 1;
+    //     // // const scaled_magnitude = array.map((row) =>
+    //     // //     row.map((value) => ((value - minValue) / range) * 2 - 1)
+    //     // // );
+    //     // const scaled_magnitude = magnitudes.map((row) =>
+    //     //     row.map((value) => ((value - min) / range) * 2 - 1)
+    //     // );
+    //     // return scaled_magnitude;
+    //     let min = Infinity;
+    //     let max = -Infinity;
+
+    //     // Find the minimum and maximum values
+    //     for (let i = 0; i < array.length; i++) {
+    //         // for (let value of Object.values(row)) {
+    //         //     if (typeof value === "number") {
+    //         //         if (value < minValue) {
+    //         //             minValue = value;
+    //         //         }
+    //         //         if (value > maxValue) {
+    //         //             maxValue = value;
+    //         //         }
+    //         //     }
+    //         // }
+    //         if (array[i] < min) {
+    //             min = array[i]
+    //         }
+    //         if (array[i] > max) {
+    //             max = array[i]
+    //         }
+
+    //     }
+
+    //     const range = max - min;
+    //     const scaledArray = array.map((row) =>
+    //         Object.keys(row).reduce((scaledRow, key) => {
+    //             const value = row[key];
+    //             if (typeof value === "number") {
+    //                 scaledRow[key] = ((value - min) / range) * 2 - 1;
+    //             }
+    //             return scaledRow;
+    //         }, {})
+    //     );
+    //     return scaledArray;
+    // }
+
     const [series, setSeries] = useState([]);
 
-    // const mappedWeights = []
-    // for (let i = 0; i < weights[0].length; i++) {
 
-    //     mappedWeights.push({ name: `Layer ${i + 1}`, data: weights[0][i] });
-    // }
-    // console.log(mappedWeights);
-
-    // setSeries(mappedWeights);
-    //console.log(weights[slider])
     useEffect(() => {
         // if (prevSliderRef.current !== slider) {
         //     prevSliderRef.current = slider;
@@ -85,17 +100,67 @@ function Heatmap(props) {
         //     name: `Layer ${i + 1}`, data: [{ x: `W${i + 1}`, w: weights[0][i] }]
         // });
 
-        for (let i = 0; i < weights[slider].length; i++) {
+        // for (let i = 0; i < currentEpoch.length; i++) {
+
+        //     for (let j = 0; j < currentEpoch[i].length; j++) {
+
+        //         mappedWeights.push({
+        //             name: `Layer ${j + 1}`,
+        //             data: currentEpoch[i].map((value, weight_index) => ({ x: `W${weight_index + 1}`, y: value }))
+        //         });
+
+        //         //}
+
+        //     }
+        // }
+        for (let layer in currentEpoch) {
+            if (currentEpoch.hasOwnProperty(layer)) {
+                const magnitudes = currentEpoch[layer];
+                //console.log("ADA", magnitudes)
+                //const scaled_magnitudes = scale_interval(magnitudes)
+                const min = Math.min(...magnitudes);
+                const max = Math.max(...magnitudes);
+                let scaled = magnitudes;
+                if (magnitudes.length > 1) {
+
+                    const range = max - min;
+                    scaled = magnitudes.map((value) => (2 * (value - min) / range) - 1);
+                    //console.log("SKALA", scaled)
+                }
 
 
-            mappedWeights.push({
-                name: `Layer ${i + 1}`,
-                data: weights[slider][i].map((value, j) => ({ x: `W${j + 1}`, y: value }))
-            });
+                mappedWeights.push({
+                    name: `Layer ${layer}`,
+                    //data: [{ x: `W${index}`, y: magnitude }],
+                    data: scaled.map((value, weight_index) => ({ x: `W${weight_index + 1}`, y: value }))
+                });
+                // for (let weights in layer) {
+                //     let index = 0;
+                //     if (layer.hasOwnProperty(weights)) {
+                //         const magnitude = currentEpoch[layer][weights]
+                //         //console.log(magnitude)
+                //         mappedWeights.push({
+                //             name: `Layer ${layer}`,
+                //             data: [{ x: `W${index}`, y: magnitude }],
+                //             //data: currentEpoch[i].map((value, weight_index) => ({ x: `W${weight_index + 1}`, y: value }))
+                //         });
 
-            //}
-            setSeries(mappedWeights);
+                //     }
+                //     index++;
+                // }
+            }
         }
+        //console.log(mappedWeights)
+        setSeries(mappedWeights);
+        // console.log(currentEpoch)
+        // for (let i = 0; i < currentEpoch.length; i++) {
+        //     const layerWeights = currentEpoch[i].map((value, weight_index) => ({ x: `W${weight_index + 1}`, y: value }));
+        //     console.log("Dobljeni: ", i)
+        //     mappedWeights.push({ name: `Layer ${i + 1}`, data: layerWeights });
+        //}
+        //setSeries(mappedWeights);
+        //console.log("Mapped: ", mappedWeights)
+        //setSeries(mappedWeights);
         // mappedWeights.push({
         //     name: `Layer ${i + 1}`,
         //     data: weights[0][i].map((value, j) => ({ x: `W${j + 1}`, y: value }))
@@ -106,7 +171,7 @@ function Heatmap(props) {
         //     //setSeries(mappedWeights);
         // }, []);
         //console.log(mappedWeights)
-    }, [slider, weights]);
+    }, [currentEpoch, weights]);
 
 
 
@@ -166,21 +231,22 @@ function Heatmap(props) {
 
 
     const [options, setOptions] = useState({
-        // chart: {
-        //     height: 500,
-        //     width: 500,
-        //     type: 'heatmap',
-        //     background: '#353535', // Set the background color here
-        //     animations: {
-        //         disabled: true
-        //     }
-        // },
+
+        chart: {
+            height: 500,
+            width: 1000,
+            type: 'heatmap',
+            background: '#353535', // Set the background color here
+            animations: {
+                disabled: false,
+            },
+        },
         // theme: {
         //     monochrome: {
         //         enabled: true,
         //         color: '#E7842D',
         //         shadeTo: 'black',
-        //         shadeIntensity: 100
+        //         shadeIntensity: 1
         //     }
         // },
         // theme: {
@@ -189,69 +255,31 @@ function Heatmap(props) {
         // },
         plotOptions: {
             heatmap: {
-                radius: 2,
+                radius: 4,
                 enableShades: true,
-                inverse: true,
+                inverse: false,
+                shadeIntensity: 0.5,
+                reverseNegativeShade: true,
+                min: -1,
+                max: 1,
                 colorScale: {
                     ranges: [
-
-                        // from: 0,
-                        // to: 1,
-                        // color: (value) => {
-                        //     const colorScale = scaleLinear()
-                        //         .domain([0, 100])
-                        //         .range(['#989898', '#E7842D'])
-                        //         .interpolate(interpolateRgb);
-
-                        //     return colorScale(value);
-                        // },
-                        // color: (value) => {
-                        //     const colorScale = scaleLinear()
-                        //         .domain([0, 100])
-                        //         .range(['#989898', '#E7842D'])
-                        //         .interpolate(interpolateRgb);
-
-                        //     return colorScale(value);
-                        // },
                         {
                             from: -1,
                             to: 0,
-                            color: "#989898" // Gray color at value 0
+                            color: "#989898",
+                            name: 'low magnitude',
+                            //foreColor: "#fff",
                         },
                         {
                             from: 0,
                             to: 1,
-                            color: "#ff7700" // #E7842D color at value 1 to 100
+                            color: "#E7842D", // #E7842D color at value 1 to 100
+                            name: 'high magnitude',
                         }
-                    ]
+                    ],
                 },
-                // colorScale: {
-                //     ranges: [
-                //         {
-                //             from: 0,
-                //             to: 100,
-                //             //color: '#E7842D' // Set the color for the heatmap
-                //             //colors: ['#989898', '#E7842D']
-                //             color: [
-                //                 {
-                //                     value: 0,
-                //                     color: '#989898'
-                //                 },
-                //                 {
-                //                     value: 100,
-                //                     color: '#E7842D'
-                //                 }
-                //             ]
-                //         }
-                //     ]
-                // },
 
-
-                stroke: {
-                    show: false,
-                    width: 0,
-                    colors: undefined
-                }
             }
         },
         grid: {
@@ -261,20 +289,14 @@ function Heatmap(props) {
             enabled: false,
         },
         title: {
-            text: 'Weight values',
-            floating: false,
-            style: {
-                fontSize: '18px',
-                fontFamily: 'Satoshi',
-                fontWeight: 'medium',
-                color: '#E7842D' // Set the text color here
-            }
+            text: 'Heatmap',
+            floating: true,
         },
-        strokeOpacity: 0,
-        //colors: ["#E7842D"],
 
         stroke: {
-            show: false,
+            show: true,
+            width: 2,
+            colors: "#E7842D",
         },
         xaxis: {
             labels: {
@@ -300,9 +322,10 @@ function Heatmap(props) {
     return (
         // <SeriesContext.Provider value={{ series, setSeries }}>
         <React.Fragment>
-            <ReactApexChart options={options} series={series} type="heatmap" width={1000} height={400} background="#353535" animations={{
-                enabled: false,
-            }} />
+            {/* <ReactApexChart options={options} series={series} type="heatmap" width={1000} height={400} background="#353535" animations={{
+                enabled: true,
+            }} /> */}
+            <ReactApexChart height={360} type="heatmap" options={options} series={series} />
         </React.Fragment>
         // </SeriesContext.Provider>
     );

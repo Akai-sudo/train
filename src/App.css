@@ -1,7 +1,9 @@
 .App {
   text-align: center;
   font-family: 'Satoshi', sans-serif;
-
+  background-color: #353535;
+  min-height: 100vh;
+  /* background-image: linear-gradient(to right, #E7842D, #353535); */
 }
 
 .font-link {
@@ -14,58 +16,19 @@
 }
 
 .layout-container {
+  width: 50vw;
   height: 500px;
-  max-width: 500px;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center; */
 }
 
-/* .props {
-  
-} */
-
-/* .radio-label {
-  width: 100%;
-  margin-bottom: 1em;
-  text-align: center;
-} */
-
-/* input[type="radio"] {
- 
-  -webkit-appearance: none;
-  appearance: none;
-
-  background-color: #ffffff;
-  
-  margin: 0;
-
-  font: inherit;
-  color: currentColor;
-  width: 1.15em;
-  height: 1.15em;
-  border: 0.15em solid currentColor;
-  border-radius: 50%;
-  transform: translateY(0.21em);
-} */
-
-/* input[type="radio"]::before {
-  content: "";
-  width: 0.65em;
-  height: 0.65em;
-  border-radius: 50%;
-  transform: scale(0);
-  transition: 120ms transform ease-in-out;
-  box-shadow: inset 1em 1em var(--form-control-color);
-  background-color: CanvasText;
-
-} */
-
-/* input[type="radio"]:checked::before {
-  transform: scale(1);
-}
-
-input[type="radio"]:focus {
-  outline: max(2px, 0.15em) solid currentColor;
-} */
 
 ul.no-bullets {
   list-style-type: none;
@@ -88,23 +51,75 @@ ul.no-bullets {
   align-content: flex-start;
 }
 
+.switcher {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .title {
   font-family: 'Satoshi', sans-serif;
-  font-size: 1.9em;
-  color: #989898;
+  font-size: 2.5em;
+  color: rgb(152, 152, 152);
   /* text-shadow: 0 25px 50px -12px rgb(193, 33, 33); */
-  text-shadow: 10px 2px 14px rgb(0, 0, 0);
+  text-shadow: 10px 2px 20px rgb(12, 12, 12);
   margin: 0 0 1em 0.3em;
   padding: 0.3em;
 }
 
+.box {
+  width: 90px;
+  height: 90px;
+  border-radius: 12px;
+  background: #545454;
+  font-size: 18px;
+  font-weight: 600;
+  box-shadow: 0px 0px 30px 10px rgba(48, 48, 48, 0.7);
+  color: #eeeeee;
+  margin: 1em;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-content: space-between;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s;
+  transition-timing-function: ease-in-out;
+  /* transition: background-color 1s ease-in-out 50ms; */
+  /* transition: width 0.5s ease-in-out 20ms;
+  transition: height 0.5s ease-in-out 20ms; */
+}
+
+.box:hover {
+  background-color: #E7842D;
+  /* width: 95px;
+  height: 95px; */
+
+  -webkit-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  transform: scale(1.05);
+  transition-property: transform;
+  transition: 0.5s;
+  transition-timing-function: ease-in-out;
+}
+
+.boxGroup {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .main {
   display: flex;
+  color: #E7842D;
   flex-direction: row;
   align-items: center;
   flex-wrap: nowrap;
   align-content: center;
   justify-content: space-evenly;
+  font-size: calc(10px + 2vmin);
 
 }
 
@@ -117,13 +132,6 @@ ul.no-bullets {
   padding: 1em;
 }
 
-.carousel {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-}
-
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -131,7 +139,7 @@ ul.no-bullets {
 
 .App-header {
   background-color: #353535;
-  min-height: 100vh;
+  /* min-height: 100vh; */
 
   /* display: flex;
   flex-direction: column;
@@ -142,6 +150,23 @@ ul.no-bullets {
   font-size: calc(10px + 2vmin);
   /* color: rgb(231, 132, 45); */
   color: #E7842D;
+}
+
+.chooser {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.moon {
+  background-color: #222222;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 5px solid #222222;
+  /* I set 2 shadows where the first one doesn't have blur and spread for firefox fix. */
+  box-shadow: inset 16px 0px 5px #999, inset 2px 0px 0px 0px #999;
+  -moz-box-shadow: inset 16px 0px #999, inset 0px 0px 0px 0px #999;
 }
 
 .App-link {
@@ -227,7 +252,8 @@ ul.no-bullets {
   width: 35%;
   height: 35px;
   border-radius: 9999px;
-  background: rgb(152, 152, 152, 0.3);
+  opacity: 0.85;
+  background: rgba(234, 234, 234, 0.3);
   box-shadow: 0 25px 50px -12px rgba(231, 132, 45, 0.3), inset 0 0 20px #626161;
   /* box-shadow: 0 25px 50px -12px rgba(231, 132, 45, 0.3), inset 0 0 20px #626161, inset -60px 0 10px #E7842D, inset 60px 0 10px rgb(81, 81, 81); */
   /* inner white */
@@ -239,7 +265,7 @@ ul.no-bullets {
 }
 
 .slider:hover {
-  opacity: 0.85;
+  opacity: 1;
 }
 
 .slider::-webkit-slider-thumb {
@@ -254,7 +280,7 @@ ul.no-bullets {
 }
 
 .slider::-webkit-slider-thumb:hover {
-  background: #E7842D;
+  background: #ff8820;
 }
 
 .slider::-moz-range-thumb {
@@ -267,6 +293,70 @@ ul.no-bullets {
 
 .slider::-moz-range-thumb:hover {
   background: #E7842D;
+}
+
+/*for phones*/
+@media (max-width: 767px) {
+
+  .App {
+    width: 100vw;
+    min-height: 50vw;
+    height: 100%;
+  }
+
+  .title {
+    font-size: 1.5em;
+  }
+
+  .main {
+    flex-direction: column;
+    width: 100vw;
+    min-height: 100vw;
+  }
+
+  .subscreen {
+    flex-direction: column;
+    font-size: 0.8em;
+    padding: 0.5em;
+  }
+
+  .slider {
+    width: 100%;
+    padding: 1em;
+  }
+}
+
+/* Styles for tablets */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .App {
+    text-align: center;
+    font-family: 'Satoshi', sans-serif;
+    background-color: #353535;
+    min-height: 100vh;
+    /* background-image: linear-gradient(to right, #E7842D, #353535); */
+  }
+
+  .font-link {
+    font-family: 'Satoshi', sans-serif;
+  }
+
+  .visualization {
+    width: 500px;
+    /* margin: 10px 10px 10px 10px; */
+  }
+
+  .layout-container {
+    height: 100%;
+    width: 100%;
+    /* width: 60vw;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: stretch; */
+  }
 }
 
 /* @media (prefers-reduced-motion: no-preference) {

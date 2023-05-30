@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 
 const Slider = React.memo(({ onSliderValueChange }) => {
-    const [sliderValue, setSliderValue] = useState(50);
+    const [sliderValue, setSliderValue] = useState(0);
 
     // const handleSliderChange = (event) => {
     //     const value = event.target.value;
