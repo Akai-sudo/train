@@ -12,8 +12,6 @@ import stars from "../stars.svg"
 
 import React, { memo } from 'react';
 
-import ToggleButton from 'react-bootstrap/ToggleButton';
-import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 
 import { useSpring, animated } from '@react-spring/web';
 
@@ -49,7 +47,7 @@ const LayoutSwitcher = (props) => {
         to: { opacity: 1, y: 0 }
     });
 
-    const [selectedLayout, setSelectedLayout] = useState('layout1');
+    const [selectedLayout, setSelectedLayout] = useState('Loss curve');
     const handleLayoutChange = (layout) => {
         //console.log("changed!")
         setSelectedLayout(layout);

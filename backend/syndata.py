@@ -45,8 +45,8 @@ def generateCircles():
     return scaled_x, labels_y
 
 def generateClass():
-    features_x, labels_y = ds.make_classification(n_samples=300,  shuffle=True, noise=0.01, random_state=10)
-    scaler = StandardScaler()
+    features_x, labels_y = ds.make_classification(n_samples=300, n_features=2, n_informative=2, n_redundant=0, n_repeated=0, shuffle=True, random_state=10)
+    scaler = MinMaxScaler()
     scaled_x = scaler.fit_transform(features_x)
     return scaled_x, labels_y
 

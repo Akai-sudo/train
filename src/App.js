@@ -14,10 +14,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Loading from "./Component/Loading";
 import LayoutSwitcher from "./Component/LayoutSwitcher"
 
-import Dropdown from 'react-bootstrap/Dropdown';
 
 import { useSpring, animated } from '@react-spring/web'
-import MoonButton from "./Component/MoonButton";
 
 
 import { Globals } from "@react-spring/shared";
@@ -42,7 +40,7 @@ export default function App() {
   const [neurons, setNeurons] = useState(0)
   const [activations, setActivations] = useState(0)
 
-  const [selectedDataset, setDataset] = useState('moons')
+  const [selectedDataset, setDataset] = useState('Moons')
 
   // const datasetHandler = (event) => {
   //     console.log("changed!")
@@ -51,8 +49,9 @@ export default function App() {
   // };
 
   const datasetHandler = (dataset) => {
-    console.log(dataset)
+    //console.log(dataset)
     setDataset(dataset);
+    //console.log("yaas")
   };
 
   //console.log(selectedDataset)
@@ -132,13 +131,6 @@ export default function App() {
             <span>br</span>
             <span style={{ color: "#E7842D" }}>AI</span>
             <span>n</span>
-
-
-            {/* <Dropdown.Menu show>
-                <Dropdown.Header>Choose dataset</Dropdown.Header>
-                <Dropdown.Item eventKey="2" value="moons" onClick={() => datasetHandler('moons')}>Moons</Dropdown.Item>
-                <Dropdown.Item eventKey="3" value="circles" onClick={() => datasetHandler('circles')}>Circles</Dropdown.Item>
-              </Dropdown.Menu> */}
           </animated.div>
         </div>
       </div>
@@ -149,9 +141,8 @@ export default function App() {
 
       <div className="main">
 
-        {/* <div className="moon"></div> */}
-        {/* <MoonButton onClick={() => datasetHandler('circles')} />
-        <MoonButton onClick={() => datasetHandler('moons')} /> */}
+
+
 
         {/* <div className="boxGroup">
           <div className="box"><img src={loss} alt="loss" />Loss</div>
@@ -174,7 +165,15 @@ export default function App() {
 
           </animated.div>
 
-          {data ? <Params data={data} /> : <Loading />}
+          <div>
+            <button className="circle" value="Circles" onClick={() => datasetHandler("Circles")}>Circles</button>
+            <button className="moon" value="Moons" onClick={() => datasetHandler("Moons")}>Moons</button>
+            <button className="class" value="Classification" onClick={() => datasetHandler("Classification")}>Classify</button>
+            {/* You can add any content inside the button */}
+            {/* <MoonButton onClick={() => datasetHandler("circles")} />
+            <MoonButton onClick={() => datasetHandler("moons")} /> */}
+          </div>
+          {data ? <Params data={data} dataset={selectedDataset} /> : <Loading />}
         </div>
 
 

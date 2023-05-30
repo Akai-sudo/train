@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 # import sklearn.datasets as ds
 # from sklearn import linear_model
 
-from syndata import generateMoons, generateCircles
+from syndata import generateMoons, generateCircles, generateClass
 
 from keras.constraints import Constraint
 import keras.backend as K
@@ -165,17 +165,21 @@ def generateNetwork(dataset):
     max_iter = 3000
     neuron_num = 32
     network_params = {}
+    samples = 150
     #features_x, labels_y
     features_x = []
     labels_y = []
 
     #network_params_list = []; 
-    if dataset == "circles":
-        print("circles")
+    if dataset == "Circles":
+        #print("circles")
+        samples = 300
         features_x, labels_y = generateCircles()
-    elif dataset == "moons":
-        print("moons")
+    elif dataset == "Moons":
+        #print("moons")
         features_x, labels_y = generateMoons()
+    elif dataset == "Classification":
+        features_x, labels_y = generateClass()
 
     # if not features_x or not labels_y:
     #     # Handle the case when features_x or labels_y is empty
@@ -275,8 +279,8 @@ def generateNetwork(dataset):
     network_params['activations'] = relu_activations
     network_params['neurons'] = neuron_num
     network_params['epochs'] = epochs_num
-    network_params['layers'] = len(model.layers)
-    network_params['batches'] = batch_size
+    network_params['layers'] = (len(model.layers)-1)
+    network_params['batches'] = samples
 
     # num of batches is equal to number of iterations for one epoch
     

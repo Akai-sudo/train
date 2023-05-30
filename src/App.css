@@ -85,9 +85,6 @@ ul.no-bullets {
   align-items: center;
   transition: 0.5s;
   transition-timing-function: ease-in-out;
-  /* transition: background-color 1s ease-in-out 50ms; */
-  /* transition: width 0.5s ease-in-out 20ms;
-  transition: height 0.5s ease-in-out 20ms; */
 }
 
 .box:hover {
@@ -125,7 +122,7 @@ ul.no-bullets {
 
 .subscreen {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   font-size: 1em;
@@ -159,15 +156,70 @@ ul.no-bullets {
 }
 
 .moon {
-  background-color: #222222;
+  background-color: rgb(76, 76, 76);
+
+  color: white;
   width: 100px;
   height: 100px;
-  border-radius: 50%;
-  border: 5px solid #222222;
+  border-radius: 100%;
+  font-size: 20px;
+  border: 5px solid #353535;
   /* I set 2 shadows where the first one doesn't have blur and spread for firefox fix. */
-  box-shadow: inset 16px 0px 5px #999, inset 2px 0px 0px 0px #999;
+  box-shadow: inset 16px 10px 2px 1px #616161, inset 2px 0px 0px 0px #616161;
   -moz-box-shadow: inset 16px 0px #999, inset 0px 0px 0px 0px #999;
+  transition: 0.5s;
+  transition-timing-function: ease-in-out;
 }
+
+.moon:hover {
+  box-shadow: inset 16px 0px 2px 1px #e38d42;
+  /* box-shadow: inset 1px 2px 2px 1px #e38d42, inset 2px 2px 5px 5px #e38d42; */
+  -webkit-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  transform: scale(1.05);
+  transition-property: transform;
+  transition: 0.5s;
+  transition-timing-function: ease-in-out;
+}
+
+.circle {
+  background-color: rgb(76, 76, 76);
+  color: white;
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  font-size: 20px;
+  border: 5px solid #353535;
+  /* I set 2 shadows where the first one doesn't have blur and spread for firefox fix. */
+  box-shadow: inset 20px 0px 1px 20px #616161, inset 10px 10px 30px 0px #616161;
+  -moz-box-shadow: inset 16px 0px #999, inset 0px 0px 0px 0px #999;
+  transition: 0.5s;
+  transition-timing-function: ease-in-out;
+}
+
+.circle:hover {
+  box-shadow: inset 0px 0px 0px 0px #e38d42;
+  /* box-shadow: inset 16px 10px 2px 1px #e38d42, inset 2px 0px 5px 0px #e38d42; */
+  -webkit-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  transform: scale(1.05);
+  transition-property: transform;
+  transition: 0.5s;
+  transition-timing-function: ease-in-out;
+}
+
+.class {
+  color: white;
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  font-size: 20px;
+  border: 5px solid #353535;
+  /* background-color: rgb(76, 76, 76); */
+  background-image: -webkit-linear-gradient(210deg, rgb(76, 76, 76) 50%, #616161 50%);
+}
+
+.class:hover {}
 
 .App-link {
   color: #61dafb;
@@ -315,7 +367,7 @@ ul.no-bullets {
   }
 
   .subscreen {
-    flex-direction: column;
+    flex-direction: row;
     font-size: 0.8em;
     padding: 0.5em;
   }
