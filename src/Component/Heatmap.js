@@ -174,62 +174,6 @@ function Heatmap(props) {
     }, [currentEpoch, weights]);
 
 
-
-
-
-
-    // const series = weights[0].map((data, index) => {
-    //     const newData = [];
-
-    //     for (let i = 0; i < data.data.length; i++) {
-    //         // Perform additional logic here
-    //         // You can access each data point using data.data[i]
-    //         // Modify or process the data as needed
-
-    //         newData.push({ x: `W${i + 1}`, y: data.data[i] });
-    //     }
-
-    //     return {
-    //         name: data.name,
-    //         data: newData
-    //     };
-    // });
-
-
-    // const [series, setSeries] = useState(
-
-    //     [
-    //         {
-    //             name: "Series 1",
-    //             data: [
-    //                 { x: 'W1', y: 0 },
-    //                 { x: 'W2', y: 10 },
-    //                 { x: 'W3', y: 13 },
-    //                 { x: 'W4', y: 32 }
-    //             ]
-    //         },
-    //         {
-    //             name: "Series 2",
-    //             data: [
-    //                 { x: 'W1', y: 43 },
-    //                 { x: 'W2', y: 43 },
-    //                 { x: 'W3', y: 43 },
-    //                 { x: 'W4', y: 43 }
-    //             ]
-    //         },
-    //         {
-    //             name: "Series 3",
-    //             data: [
-    //                 { x: 'W1', y: 50 },
-    //                 { x: 'W2', y: 65 },
-    //                 { x: 'W3', y: 75 },
-    //                 { x: 'W4', y: 88 }
-    //             ]
-    //         }
-    //     ]
-    // );
-
-
     const [options, setOptions] = useState({
 
         chart: {

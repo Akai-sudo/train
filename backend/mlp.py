@@ -118,7 +118,7 @@ def extract_relu_activations(epoch_activations):
 
 #magnitude_dict = {}
 
-def neuron_weights_callback(epoch, logs, model, magnitudes_dict):
+def neuron_weights_callback(epoch, logs, model, magnitudes_dict, weights_dict):
     # if epoch not in magnitudes_dict:
     #     magnitudes_dict[epoch] = {}
     layer_index = 0
@@ -126,6 +126,8 @@ def neuron_weights_callback(epoch, logs, model, magnitudes_dict):
         if isinstance(layer, Dense):
             if epoch not in magnitudes_dict:
                 magnitudes_dict[epoch] = {}
+            if epoch not in weights_dict:
+                weights_dict[epoch] = {}
             # if layer_index not in magnitudes_dict[epoch]:
             #     magnitudes_dict[epoch][layer_index] = []
 
@@ -133,6 +135,7 @@ def neuron_weights_callback(epoch, logs, model, magnitudes_dict):
             weight_magnitudes = weights.mean(axis=0).tolist()
 
             magnitudes_dict[epoch][layer_index] = weight_magnitudes
+            weights_dict[epoch][layer_index] = weights.tolist()
         layer_index += 1
     
     # currentLayer = 0
@@ -177,8 +180,10 @@ def generateNetwork(dataset):
         features_x, labels_y = generateCircles()
     elif dataset == "Moons":
         #print("moons")
+        samples = 150
         features_x, labels_y = generateMoons()
     elif dataset == "Classification":
+        samples = 150
         features_x, labels_y = generateClass()
 
     # if not features_x or not labels_y:
@@ -247,7 +252,7 @@ def generateNetwork(dataset):
     # weight_callback = LambdaCallback(on_epoch_end=lambda epoch, logs: neuron_weights_callback(epoch, logs, model, weights_dict)
     # )
 
-    weight_callback = LambdaCallback(on_epoch_end=lambda epoch, logs: neuron_weights_callback(epoch, logs, model, magnitudes_dict))
+    weight_callback = LambdaCallback(on_epoch_end=lambda epoch, logs: neuron_weights_callback(epoch, logs, model, magnitudes_dict, weights_dict))
 
     activation_callback = LambdaCallback(on_epoch_end=lambda epoch, logs: relu_activations.append(extract_relu_activations(K.function([model.layers[0].input], [model.layers[0].output])([X_train]))))
 
@@ -275,11 +280,18 @@ def generateNetwork(dataset):
     weight_values = np.array(weight_values, dtype=object)
 
     network_params['loss'] = loss_values
+    network_params['all_weights'] = weights_dict
     network_params['weights'] = magnitudes_dict
     network_params['activations'] = relu_activations
     network_params['neurons'] = neuron_num
     network_params['epochs'] = epochs_num
     network_params['layers'] = (len(model.layers)-1)
+    # if dataset == "Circles":
+    #     samples = 300
+    # elif dataset == "Moons":
+    #     samples = 150
+    # elif dataset == "Classification":
+    #     samples = 150
     network_params['batches'] = samples
 
     # num of batches is equal to number of iterations for one epoch

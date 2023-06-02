@@ -59,9 +59,9 @@ const LayoutSwitcher = (props) => {
         } else if (selectedLayout === 'Heatmap') {
             return (props.neurons ? <Heatmap slider={props.slider} neurons={props.neurons} weights={props.weights} layers={props.layers} /> : <Loading />);
         } else if (selectedLayout === 'Space') {
-            return (props.neurons ? <Space neurons={props.neurons} /> : <Loading />);
+            return (props.neurons ? <Space slider={props.slider} neurons={props.neurons} weights={props.allweights} layers={props.layers} /> : <Loading />);
         } else if (selectedLayout === 'Signal') {
-            return <Signal amplitude={amplitude} frequency={frequency} />
+            return <Signal />
         }
         return null;
     };
@@ -100,7 +100,7 @@ const LayoutSwitcher = (props) => {
                     }}
                 >
 
-                    <div>{selectedLayout}</div>
+                    <div>{selectedLayout === "Space" ? null : selectedLayout}</div>
                     {/* {LayoutComponent} */}
                     {renderLayout()}
                 </animated.div>

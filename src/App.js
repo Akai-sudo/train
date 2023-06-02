@@ -35,6 +35,7 @@ export default function App() {
 
   const [lossdata, setLossData] = useState([])
 
+  const [allWeights, setAllWeights] = useState([])
   const [weights, setWeights] = useState([])
   const [layers, setLayers] = useState(0)
   const [neurons, setNeurons] = useState(0)
@@ -93,6 +94,7 @@ export default function App() {
           //localStorage.setItem('data', stringdata);
           setData(data)
           setLayers(data["layers"])
+          setAllWeights(data["all_weights"])
           setNeurons(data["neurons"])
           setWeights(data["weights"])
           setLossData(data["loss"])
@@ -106,7 +108,7 @@ export default function App() {
   }, [selectedDataset])
 
 
-  //console.log("Magnitude:", weights)
+  console.log("Magnitude:", weights)
   //console.log(weights)
 
   // console.log("Activations are: " + activations)
@@ -131,7 +133,12 @@ export default function App() {
             <span>br</span>
             <span style={{ color: "#E7842D" }}>AI</span>
             <span>n</span>
+
+            <div>
+              <a href="https://github.com/Akai-sudo/train">GitHub</a>
+            </div>
           </animated.div>
+
         </div>
       </div>
       <header className="App-header">
@@ -151,7 +158,7 @@ export default function App() {
           <div className="box"><img width="50" height="50" src="https://img.icons8.com/ios/50/000000/sine--v1.png" alt="sine--v1" />Signal</div>
         </div> */}
 
-        <LayoutSwitcher slider={externalValue} data={data} lossyarray={lossyarray} neurons={neurons} weights={weights} layers={layers} />
+        <LayoutSwitcher slider={externalValue} data={data} lossyarray={lossyarray} neurons={neurons} weights={weights} allweights={allWeights} layers={layers} />
 
         {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <div className="subscreen">

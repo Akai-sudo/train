@@ -212,14 +212,81 @@ ul.no-bullets {
   color: white;
   width: 100px;
   height: 100px;
-  border-radius: 100%;
+  border-radius: 50%;
   font-size: 20px;
   border: 5px solid #353535;
   /* background-color: rgb(76, 76, 76); */
-  background-image: -webkit-linear-gradient(210deg, rgb(76, 76, 76) 50%, #616161 50%);
+  /* background-image: linear-gradient(210deg, rgb(76, 76, 76) 50%, #616161 50%); */
+  /* transition: background-image 0.5s ease-in-out, transform 0.5s ease-in-out; */
+
+  transition: .5s;
+  position: relative;
+  overflow: hidden;
+
+  background: linear-gradient(60deg, rgb(76, 76, 76) 50%, #616161 50%);
+  background-position: center center;
+  /* animation: gradientAnimation 5s ease-in-out infinite;
+  transition: transform 0.5s ease-in-out; */
+  /* background-image: -webkit-linear-gradient(210deg, rgb(76, 76, 76) 50%, #616161 50%);
+
+  -webkit-animation: Animation 5s ease-in-out infinite;
+  -moz-animation: Animation 5s ease-in-out infinite;
+  animation: Animation 5s ease-in-out infinite; */
+
+  transition: 0.5s;
+  transition-timing-function: ease-in-out;
 }
 
-.class:hover {}
+.class::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+
+  background: linear-gradient(60deg, #616161 70%, #e38d42 25%);
+  background-position: center center;
+  /* background: linear-gradient(60deg, #e38d42 50%, #e38d42 50%); */
+  /* background: linear-gradient(30deg, rgb(76, 76, 76) 50%, #616161 50%); */
+  transition: transform 0.5s ease-in-out;
+  transform: translateX(50%);
+  z-index: 1;
+  /* Move the pseudo-element below the text */
+}
+
+.class:hover::before {
+  transform: translateX(-50%);
+
+}
+
+.class::after {
+  content: "Classify";
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  /* Bring the text above the pseudo-element */
+}
+
+/* .class:hover {
+  --c: 100%;
+} */
+
+
+/* .class:hover {
+  background-image: linear-gradient(210deg, #616161 50%, rgb(76, 76, 76) 50%);
+  transform: scale(1.05);
+  background-image: -webkit-linear-gradient(210deg, #616161 50%, rgb(76, 76, 76)50%);
+  -webkit-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  transform: scale(1.05);
+  transition-property: transform;
+  transition: 0.5s;
+  transition-timing-function: ease-in-out;
+} */
 
 .App-link {
   color: #61dafb;
@@ -266,6 +333,8 @@ ul.no-bullets {
     transform: translateY(-10px);
   }
 }
+
+
 
 .bouncing-loader>div:nth-child(2) {
   animation-delay: 0.2s;
