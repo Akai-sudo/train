@@ -1,5 +1,7 @@
 import React, { useState, useCallback } from "react";
 
+
+
 const Slider = React.memo(({ onSliderValueChange }) => {
     const [sliderValue, setSliderValue] = useState(0);
 
@@ -8,6 +10,8 @@ const Slider = React.memo(({ onSliderValueChange }) => {
     //     setSliderValue(value);
     //     onSliderValueChange(value);
     // };
+    const epoch = Number(sliderValue) + 1;
+
     const handleSliderChange = useCallback((event) => {
         const value = event.target.value;
         setSliderValue(value);
@@ -15,13 +19,16 @@ const Slider = React.memo(({ onSliderValueChange }) => {
     }, [onSliderValueChange]);
 
     return (
-        <input
-            type="range"
-            min="0" max="99"
-            name="epoch"
-            value={sliderValue}
-            onChange={handleSliderChange}
-            className="slider" />
+        <div className="sliderDiv">
+            <span>Epoch: {epoch}</span>
+            <input
+                type="range"
+                min="0" max="99"
+                name="epoch"
+                value={sliderValue}
+                onChange={handleSliderChange}
+                className="slider" />
+        </div>
     );
 });
 

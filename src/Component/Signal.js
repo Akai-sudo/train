@@ -2,12 +2,17 @@ import React, { useRef, useEffect } from 'react';
 
 const Signal = () => {
     const canvasRef = useRef(null);
-    const amplitude = 50; // Amplitude of the wave
+
     const frequency = 0.02; // Frequency of the wave
+    const amplitude = Math.random(frequency); // Amplitude of the wave
+
+    const canvasWidth = 700; // Desired canvas width
+    const canvasHeight = 300; // Desired canvas height
     const color = "#E7842D";
 
     useEffect(() => {
         const canvas = canvasRef.current;
+
         const ctx = canvas.getContext('2d');
         let phase = 0;
 
@@ -20,7 +25,7 @@ const Signal = () => {
             ctx.strokeStyle = color;
 
             for (let x = 0; x < width; x++) {
-                const y = amplitude * Math.cos(x * frequency + phase) + height / 2;
+                const y = x * Math.cos(x * frequency + phase) + height / 2;
                 ctx.lineTo(x, y);
             }
 
@@ -35,7 +40,7 @@ const Signal = () => {
         return () => cancelAnimationFrame(generateSignal);
     }, []);
 
-    return <canvas ref={canvasRef} />;
+    return <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight} />;
 };
 
 export default Signal;

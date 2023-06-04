@@ -27,7 +27,7 @@ import pandas as pd
 import json
 import numpy as np
 
-from syndata import scale_data
+# from syndata import scale_data
 
 class Between(Constraint):
     def __init__(self, min_value, max_value):
@@ -68,12 +68,22 @@ class NumpyEncoder(json.JSONEncoder):
 #     else:
 #         return data
 
-def extract_relu_activations(epoch_activations):
+def extract_relu_activations(epoch_activations, epoch, activations_dict):
     relu_activations = []
+    if epoch not in activations_dict:
+        activations_dict[epoch] = {}
     for activation in epoch_activations:
         relu_activation = np.maximum(activation, 0)
         relu_activations.append(relu_activation)
-    return relu_activations
+    #activations_dict[epoch] = relu_activation
+    
+    # Extract activation values for output layers
+    output_activations = relu_activations[-1]  # Assuming output activations are the last elements
+    
+    activations_dict[epoch] = output_activations
+    
+
+    #return relu_activations
 
 # def neuron_weights_callback(epoch, logs, model, weights_dict):
 #     layer_index = 0
@@ -132,11 +142,54 @@ def neuron_weights_callback(epoch, logs, model, magnitudes_dict, weights_dict):
             #     magnitudes_dict[epoch][layer_index] = []
 
             weights = layer.get_weights()[0]
-            weight_magnitudes = weights.mean(axis=0).tolist()
+            weight_magnitudes = np.abs(weights.mean(axis=0)).tolist()
 
             magnitudes_dict[epoch][layer_index] = weight_magnitudes
             weights_dict[epoch][layer_index] = weights.tolist()
         layer_index += 1
+
+# def activation_values_callback(epoch, logs, model, activations_dict, X_train):
+#     # layer_index = 0
+#     # #activations = []
+#     # for layer in model.layers:
+#     #     if isinstance(layer, Dense):
+#     #         if epoch not in activations_dict:
+#     #             activations_dict[epoch] = {}
+            
+#     #         input = layer.input
+#     #         output = layer.output
+#     #         activation_function = K.function([input], [output])
+#     #         reshaped = np.reshape([X_train], (-1, 32))
+#     #         calculate_activation = activation_function(reshaped)
+#     #         #activations.append(calculate_activation)
+#     #         activations_dict[epoch][layer_index] = calculate_activation
+#         #layer_index += 1
+
+#     if epoch not in activations_dict:
+#         activations_dict[epoch] = {}
+
+#     activations = []
+#     for i in range(len(model.layers)):
+#         layer_input = model.layers[i].input
+#         layer_output = model.layers[i].output
+#         activation_fn = K.function([layer_input], [layer_output])
+#         train_np = np.array(X_train)
+#         reshaped = train_np.reshape(-1, 32)
+
+#         activation = activation_fn([reshaped])
+#         activations.append(activation)
+#         activations_dict[epoch][i] = activations
+
+          
+    # activations = []
+    # for i in range(len(model.layers)):
+    #     layer_input = model.layers[i].input
+    #     layer_output = model.layers[i].output
+    #     activation_fn = K.function([layer_input], [layer_output])
+    #     activation = activation_fn([X_train])
+    #     activations.append(activation)
+    # layer_activations.append(activations)
+
     
     # currentLayer = 0
     # for layer in model.layers:
@@ -168,7 +221,7 @@ def generateNetwork(dataset):
     max_iter = 3000
     neuron_num = 32
     network_params = {}
-    samples = 150
+    currentSamples  = None
     #features_x, labels_y
     features_x = []
     labels_y = []
@@ -176,15 +229,17 @@ def generateNetwork(dataset):
     #network_params_list = []; 
     if dataset == "Circles":
         #print("circles")
-        samples = 300
+        samples = 500
         features_x, labels_y = generateCircles()
     elif dataset == "Moons":
         #print("moons")
         samples = 150
         features_x, labels_y = generateMoons()
     elif dataset == "Classification":
-        samples = 150
+        samples = 300
         features_x, labels_y = generateClass()
+
+    currentSamples = samples
 
     # if not features_x or not labels_y:
     #     # Handle the case when features_x or labels_y is empty
@@ -196,20 +251,6 @@ def generateNetwork(dataset):
     X_train, X_test, y_train, y_test = train_test_split(features_x, labels_y, train_size=0.8, test_size=0.2, random_state=42)
 
 
-    #MLP KERAS
-
-    # model = Sequential()
-    # model.add(Dense(16, activation='relu', input_dim=input_dim))  # First hidden layer
-    # model.add(Dense(16, activation='relu'))  # Second hidden layer
-    # model.add(Dense(output_dim, activation='softmax'))  # Output layer
-
-    # model = keras.Sequential(
-    # [
-    #     layers.Dense(2, activation="relu", name="layer1"),
-    #     layers.Dense(3, activation="relu", name="layer2"),
-    #     layers.Dense(4, name="layer3"),
-    # ]
-    # )
 
     model = Sequential()
     model.add(Dense(neuron_num, kernel_constraint=Between(-1,1), activation='relu', input_dim=2))
@@ -219,7 +260,6 @@ def generateNetwork(dataset):
 
     model.compile(optimizer='adam', loss='binary_crossentropy')
 
-    # Set up the ModelCheckpoint callback
     # checkpoint = ModelCheckpoint(
     #     'weights-{epoch:02d}.h5',
     #     save_weights_only=True,
@@ -245,6 +285,7 @@ def generateNetwork(dataset):
 
     weights_dict = {}
     magnitudes_dict = {}
+    activations_dict = {}
 
     # weight_callback = LambdaCallback \
     # ( on_epoch_end=lambda epoch, logs: weights_dict.update({epoch:model.get_weights()}))
@@ -253,28 +294,30 @@ def generateNetwork(dataset):
     # )
 
     weight_callback = LambdaCallback(on_epoch_end=lambda epoch, logs: neuron_weights_callback(epoch, logs, model, magnitudes_dict, weights_dict))
+    #activation_callback = LambdaCallback(on_epoch_end=lambda epoch, logs: activation_values_callback(epoch, logs, model, activations_dict, X_train))
 
-    activation_callback = LambdaCallback(on_epoch_end=lambda epoch, logs: relu_activations.append(extract_relu_activations(K.function([model.layers[0].input], [model.layers[0].output])([X_train]))))
-
-    scaler = MinMaxScaler(feature_range=(0, 1))
-    scaler.fit(X_train)
-    scaled_x = scaler.transform(X_train)
-    #scaled_x = scaler.fit_transform(X_train)
+    #activation_callback = LambdaCallback(on_epoch_end=lambda epoch, logs: relu_activations.append(extract_relu_activations(K.function([model.layers[0].input], [model.layers[0].output])([X_train], epoch, activations_dict))))
+    activation_callback = LambdaCallback(
+        on_epoch_end=lambda epoch, logs: relu_activations.append(
+            extract_relu_activations(
+                K.function([model.layers[0].input], [model.layers[0].output])([X_train]),
+                epoch,
+                activations_dict
+            )
+        )
+    )
+    # scaler = MinMaxScaler(feature_range=(0, 1))
+    # scaler.fit(X_train)
+    # scaled_x = scaler.transform(X_train)
 
     epochs_num = 100 #200 dela bolš za curve od circles
     batch_size = 32
 
-    trained_model = model.fit(scaled_x, y_train, batch_size=batch_size, epochs=epochs_num, callbacks=[weight_callback, activation_callback])
+    trained_model = model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs_num, callbacks=[weight_callback, activation_callback])
 
-      # retrive weights
-    # for epoch,weights in weights_dict.items():
-    #     print("Weights for 2nd Layer of epoch #",epoch+1)
-    #     print(weights[2])
-    #     print("Bias for 2nd Layer of epoch #",epoch+1)
-    #     print(weights[3])
+
     loss_values = trained_model.history['loss']
 
-    #weights_dict_str_keys = {str(epoch): weights for epoch, weights in weights_dict.items()}
     weights_array = np.array(list(weights_dict.values()))
 
     weight_values = np.array(weight_values, dtype=object)
@@ -282,33 +325,15 @@ def generateNetwork(dataset):
     network_params['loss'] = loss_values
     network_params['all_weights'] = weights_dict
     network_params['weights'] = magnitudes_dict
-    network_params['activations'] = relu_activations
+    network_params['activations'] = activations_dict
     network_params['neurons'] = neuron_num
     network_params['epochs'] = epochs_num
     network_params['layers'] = (len(model.layers)-1)
-    # if dataset == "Circles":
-    #     samples = 300
-    # elif dataset == "Moons":
-    #     samples = 150
-    # elif dataset == "Classification":
-    #     samples = 150
-    network_params['batches'] = samples
+ 
+    network_params['batches'] = currentSamples
 
     # num of batches is equal to number of iterations for one epoch
     
     
     dumped = json.dumps(network_params, cls=NumpyEncoder)
-
-    #dumped = json.dumps(confusion_mat, cls=NumpyEncoder) !!!!!!!!!!!!!!! TA MI DELA
-
-    # x_train, x_test, y_train, y_test = train_test_split(
-    #     dataset.data, dataset.target, test_size=0.20, random_state=4
-    # )
-
-    ### Linear regressor
-    # regressor = LinearRegression()
-    # regressor.fit(x_train, y_train)
-    # y_pred = regressor.predict(X_test)
-    # print(y_pred)
-    ### END Linear regressor
     return dumped

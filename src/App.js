@@ -72,11 +72,11 @@ export default function App() {
     to: { opacity: 1, x: 0 }
   });
 
-  const [externalValue, setExternalValue] = useState(0);
+  // const [externalValue, setExternalValue] = useState(0);
 
-  const handleSliderValueChange = (value) => {
-    setExternalValue(value);
-  };
+  // const handleSliderValueChange = (value) => {
+  //   setExternalValue(value);
+  // };
 
   useEffect(() => {
     const makeAPICall = async () => {
@@ -108,9 +108,9 @@ export default function App() {
   }, [selectedDataset])
 
 
-  console.log("Magnitude:", weights)
+  //console.log("Magnitude:", weights)
   //console.log(weights)
-
+  console.log("Aktivacija ", activations)
   // console.log("Activations are: " + activations)
   const lossy = lossdata;
   const lossyarray = lossy.map(x => ({ w: x }));
@@ -134,12 +134,14 @@ export default function App() {
             <span style={{ color: "#E7842D" }}>AI</span>
             <span>n</span>
 
-            <div>
-              <a href="https://github.com/Akai-sudo/train">GitHub</a>
-            </div>
+
           </animated.div>
 
         </div>
+        <div className="git">
+          <a href="https://github.com/Akai-sudo/train" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+
       </div>
       <header className="App-header">
 
@@ -148,19 +150,8 @@ export default function App() {
 
       <div className="main">
 
+        <LayoutSwitcher data={data} lossyarray={lossdata} neurons={neurons} weights={weights} allweights={allWeights} layers={layers} />
 
-
-
-        {/* <div className="boxGroup">
-          <div className="box"><img src={loss} alt="loss" />Loss</div>
-          <div className="box"><img src={heatmap} alt="heatmap" />Heatmap</div>
-          <div className="box">Space</div>
-          <div className="box"><img width="50" height="50" src="https://img.icons8.com/ios/50/000000/sine--v1.png" alt="sine--v1" />Signal</div>
-        </div> */}
-
-        <LayoutSwitcher slider={externalValue} data={data} lossyarray={lossyarray} neurons={neurons} weights={weights} allweights={allWeights} layers={layers} />
-
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <div className="subscreen">
 
 
@@ -176,18 +167,13 @@ export default function App() {
             <button className="circle" value="Circles" onClick={() => datasetHandler("Circles")}>Circles</button>
             <button className="moon" value="Moons" onClick={() => datasetHandler("Moons")}>Moons</button>
             <button className="class" value="Classification" onClick={() => datasetHandler("Classification")}>Classify</button>
-            {/* You can add any content inside the button */}
-            {/* <MoonButton onClick={() => datasetHandler("circles")} />
-            <MoonButton onClick={() => datasetHandler("moons")} /> */}
+
           </div>
           {data ? <Params data={data} dataset={selectedDataset} /> : <Loading />}
         </div>
 
-
-        {/* <span>Epoch: {Slider.returnValue() + 1}</span> */}
-
       </div>
-      <Slider onSliderValueChange={handleSliderValueChange} />
+
     </div >
   );
 }

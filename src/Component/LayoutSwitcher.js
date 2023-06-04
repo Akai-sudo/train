@@ -10,22 +10,11 @@ import heatmap from "../heatmap.svg"
 import wave from "../wave.svg"
 import stars from "../stars.svg"
 
-import React, { memo } from 'react';
+import React from 'react';
 
 
 import { useSpring, animated } from '@react-spring/web';
-
-// const LossChart = memo(({ lossyarray }) => {
-//     return (
-//         <Chart data={lossyarray} />
-//     );
-// });
-
-// const HeatmapChart = memo(({ slider, neurons, weights, layers }) => {
-//     return (
-//         <Heatmap slider={slider} neurons={neurons} weights={weights} layers={layers} />
-//     );
-// });
+import Slider from "./Slider";
 
 
 const LayoutSwitcher = (props) => {
@@ -37,8 +26,15 @@ const LayoutSwitcher = (props) => {
     // const layer_number = props.layers
     // const neuron_number = props.neurons
     // const weights = props.weights
-    const amplitude = 5; // Change this value as desired
-    const frequency = 5;
+
+    const [externalValue, setExternalValue] = useState(0);
+    // const [epoch, setEpoch] = useState(0);
+
+    const handleSliderValueChange = (value) => {
+        setExternalValue(value);
+        // const current = Number(value) + 1;
+        // setEpoch(Number(value) + 1)
+    };
 
     const opacityProps = useSpring({
         config: { duration: 1200 },
@@ -55,11 +51,11 @@ const LayoutSwitcher = (props) => {
 
     const renderLayout = () => {
         if (selectedLayout === 'Loss curve') {
-            return (props.neurons ? <Chart data={props.lossyarray} /> : <Loading />);
+            return (props.neurons ? <Chart slider={externalValue} data={props.lossyarray} /> : <Loading />);
         } else if (selectedLayout === 'Heatmap') {
-            return (props.neurons ? <Heatmap slider={props.slider} neurons={props.neurons} weights={props.weights} layers={props.layers} /> : <Loading />);
+            return (props.neurons ? <Heatmap slider={externalValue} neurons={props.neurons} weights={props.weights} layers={props.layers} /> : <Loading />);
         } else if (selectedLayout === 'Space') {
-            return (props.neurons ? <Space slider={props.slider} neurons={props.neurons} weights={props.allweights} layers={props.layers} /> : <Loading />);
+            return (props.neurons ? <Space slider={externalValue} neurons={props.neurons} weights={props.allweights} layers={props.layers} /> : <Loading />);
         } else if (selectedLayout === 'Signal') {
             return <Signal />
         }
@@ -67,45 +63,34 @@ const LayoutSwitcher = (props) => {
     };
 
     return (
-        <div className="switcher">
-            <div className="boxGroup">
-                <div className="box" onClick={() => handleLayoutChange("Loss curve")}><img src={loss} alt="loss" />Loss</div>
-                <div className="box" onClick={() => handleLayoutChange("Heatmap")}><img src={heatmap} alt="heatmap" />Heatmap</div>
-                <div className="box" onClick={() => handleLayoutChange("Space")}><img src={stars} alt="stars" />Space</div>
-                <div className="box" onClick={() => handleLayoutChange("Signal")}><img src={wave} alt="wave" />Signal</div>
-            </div>
-            {/* <div className="chooser">
-                <h3>Choose visualization</h3>
-                <ToggleButtonGroup type="radio" className="visualizationRadio" name="options" defaultValue="layout1">
-                    <ToggleButton id="tbg-radio-1" variant="secondary" value="layout1" checked={selectedLayout === 'layout1'} onChange={handleLayoutChange}>
-                        Loss
-                    </ToggleButton>
-                    <ToggleButton id="tbg-radio-2" variant="secondary" value="layout2" checked={selectedLayout === 'layout1'} onChange={handleLayoutChange}>
-                        Heatmap
-                    </ToggleButton>
-                    <ToggleButton id="tbg-radio-3" variant="secondary" value="layout3" checked={selectedLayout === 'layout1'} onChange={handleLayoutChange}>
-                        Space
-                    </ToggleButton>
-                    <ToggleButton id="tbg-radio-4" variant="secondary" value="layout4" checked={selectedLayout === 'layout1'} onChange={handleLayoutChange}>
+        <animated.div
+            style={{
+                ...opacityProps,
+            }}
+        >
+            <div className="switcher">
+                <div className="boxGroup">
+                    <div className="box" onClick={() => handleLayoutChange("Loss curve")}><img src={loss} alt="loss" />Loss</div>
+                    <div className="box" onClick={() => handleLayoutChange("Heatmap")}><img src={heatmap} alt="heatmap" />Heatmap</div>
+                    <div className="box" onClick={() => handleLayoutChange("Space")}><img src={stars} alt="stars" />Space</div>
+                    <div className="box" onClick={() => handleLayoutChange("Signal")}><img src={wave} alt="wave" />Signal</div>
+                </div>
 
-                        Signal
-                    </ToggleButton>
-                </ToggleButtonGroup>
-            </div> */}
-
-            <div className="layout-container">
-                <animated.div
+                <div className="layout-container">
+                    {/* <animated.div
                     style={{
                         ...opacityProps,
                     }}
-                >
+                > */}
 
                     <div>{selectedLayout === "Space" ? null : selectedLayout}</div>
-                    {/* {LayoutComponent} */}
                     {renderLayout()}
-                </animated.div>
+
+                    <Slider onSliderValueChange={handleSliderValueChange} />
+                    {/* </animated.div> */}
+                </div>
             </div>
-        </div>
+        </animated.div>
     );
 }
 

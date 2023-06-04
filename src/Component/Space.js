@@ -22,15 +22,16 @@ import { BloomPass } from 'three/examples/jsm/postprocessing/BloomPass';
 
 extend({ EffectComposer, UnrealBloomPass, RenderPass });
 
+extend(THREE)
+
 const Space = (props) => {
+    // const state = useThree()
     const [hovered, hover] = useState(false);
     const [bloomEnabled, setBloomEnabled] = useState(true); // State variable to track bloom effect
-    const weights = props.weights;
+    const weights = props.weights; //allweights je weightsdict, weights je magnitudes
     const layers = props.layers;
     const neurons = props.neurons;
     const slider = props.slider;
-
-    console.log(weights)
 
     const currentEpoch = weights[slider];
     const [stars, setStars] = useState([]);
@@ -44,33 +45,43 @@ const Space = (props) => {
         );
     };
 
+    console.log("Epoch: ", currentEpoch)
+
     useEffect(() => {
         const newStars = [];
         const newStarLines = []; // Array to store the star lines
 
         for (let layer in currentEpoch) {
             if (currentEpoch.hasOwnProperty(layer)) {
-                const magnitudes = currentEpoch[layer];
-                const min = Math.min(...magnitudes);
-                const max = Math.max(...magnitudes);
-                let scaled = magnitudes;
-                if (magnitudes.length > 1) {
-                    const range = max - min;
-                    scaled = magnitudes.map((value) => (2 * (value - min) / range) - 1);
-                }
+                // const magnitudes = currentEpoch[layer];
+                // const min = Math.min(...magnitudes);
+                // const max = Math.max(...magnitudes);
+                // let scaled = magnitudes;
+                // if (magnitudes.length > 1) {
+                //     const range = max - min;
+                //     scaled = magnitudes.map((value) => (2 * (value - min) / range) - 1);
+                // }
+                const layer_neurons = currentEpoch[layer]
+                for (let index = 0; index < layer_neurons.length; index++) {
+                    // for (let index = 0; index < scaled.length; index++) {
+                    const neuron_connections = layer_neurons[index]
+                    for (let neuron_index = 0; neuron_index < neuron_connections.length; neuron_index++)
 
-                for (let index = 0; index < scaled.length; index++) {
-                    newStars.push({
-                        position: [layer, Math.random(Math.cos(layer)), Math.random(Math.cos(index))],
-                        brightness: scaled[index],
-                    });
-                    if (index > 0) {
-                        // if (index < scaled.length - 1) {
-                        newStarLines.push({
-                            startPosition: newStars[index - 1].position,
-                            endPosition: newStars[index].position,
+                        newStars.push({
+                            position: [Math.random(), Math.random(), Math.random()],
+                            brightness: neuron_connections[neuron_index],
                         });
-                    }
+                    // newStars.push({
+                    //     position: [layer, Math.random(Math.cos(layer)), Math.random(Math.cos(index))],
+                    //     brightness: scaled[index],
+                    // });
+                    // if (index > 0) {
+                    //     // if (index < scaled.length - 1) {
+                    //     newStarLines.push({
+                    //         startPosition: newStars[index - 1].position,
+                    //         endPosition: newStars[index].position,
+                    //     });
+                    // }
                 }
                 // for (let magnitude in scaled) {
                 //     newStars.push({
@@ -108,79 +119,42 @@ const Space = (props) => {
 
     const Star = ({ position, brightness }) => {
         return (
-            <mesh position={position}>
+            <mesh visible userData={{ hello: 'world' }} position={position} rotation={[Math.PI / 2, 0, 0]}>
                 {/* <pointLight intensity={brightness} /> */}
-                <pointLight intensity={brightness * 120} />
+                <pointLight intensity={brightness * 2} />
                 <sphereGeometry args={[0.02, 64, 64]} />
-                {/* <meshBasicMaterial color="white" toneMapped={false} /> */}
-                <meshPhongMaterial shininess={200} flatShading={true} scale={10} metalness={0.2} roughness={0.2} />
+                <meshBasicMaterial color="white" toneMapped={false} />
+                {/* <meshPhongMaterial flatShading={true} scale={10} metalness={0.2} roughness={0.2} /> */}
                 {/* <meshNormalMaterial color={"white"} flatShading={true} scale={10} metalness={0.2} roughness={0.2} /> */}
             </mesh>
         );
     };
 
-    // const composer = useRef();
-    // const bloomPass = useRef();
-
-
-
-    // useEffect(() => {
-    //     if (composer.current && bloomEnabled) {
-    //         const pass = new BloomPass({
-    //             strength: 1.5,
-    //             radius: 1,
-    //             threshold: 0,
-    //         });
-
-    //         composer.current.addPass(pass);
-    //         bloomPass.current = pass;
-    //     } else {
-    //         if (composer.current && bloomPass.current) {
-    //             composer.current.removePass(bloomPass.current);
-    //             bloomPass.current = null;
-    //         }
-    //     }
-    // }, [bloomEnabled]);
 
 
 
     return (
         <div style={{ height: '400px' }}>
-            <Canvas>
-                {/* <EffectComposer ref={composer}>
-                    <RenderPass args={[null, null]} />
-                    {bloomEnabled && <Bloom />}
-                </EffectComposer> */}
-                {/* <EffectComposer>
-                    <Bloom />
-                </EffectComposer>
+            <Canvas frameloop="demand">
 
-                <Stars /> */}
                 <Stars depth={10} saturation={0} factor={4} fade speed={0} />
                 <EffectComposer>
 
-                    <Bloom intensity={0.5} luminanceThreshold={0} luminanceSmoothing={0.9} />
-                    <ambientLight intensity={0.1} />
+                    <Bloom intensity={0.5} luminanceThreshold={0.3} luminanceSmoothing={0} />
+                    <ambientLight intensity={100} />
                     <pointLight intensity={2} position={[0, 0, 0]} />
                     {/* <SpaceBloom> */}
                     {stars.map((star, index) => (
                         <Star key={index} position={star.position} brightness={star.brightness} />
                     ))}
+                    {starLines.map((line, index) => (
+                        <StarLine key={index} startPosition={line.startPosition} endPosition={line.endPosition} />
+                    ))}
 
-
-                    {/* </SpaceBloom> */}
 
                     <OrbitControls />
-                    {/* <EffectComposer> */}
-                    {/* <EffectComposer ref={composer}> */}
-                    {/* {bloomEnabled && <Bloom />} */}
-                    {/* <Bloom /> */}
-                    {/* </EffectComposer> */}
-                    {/* <axesHelper args={[2, 2, 2]} /> */}
                 </EffectComposer>
-                {starLines.map((line, index) => (
-                    <StarLine key={index} startPosition={line.startPosition} endPosition={line.endPosition} />
-                ))}
+
             </Canvas>
             {/* <label>
                 <input
@@ -194,145 +168,4 @@ const Space = (props) => {
     );
 };
 
-// const SpaceBloom = ({ enabled, children }) => {
-//     // const { gl, scene, camera, size } = useThree();
-//     // const composer = useRef();
-
-//     // useEffect(() => {
-//     //     composer.current.setSize(size.width, size.height);
-//     // }, [size]);
-
-//     // useFrame(() => {
-//     //     if (composer.current) {
-//     //         composer.current.render();
-//     //     }
-//     // }, 1);
-
-//     return (
-//         <>
-//             {enabled && (
-//                 <EffectComposer>
-//                     <RenderPass attachArray="passes" />
-//                     <BloomPass attachArray="passes" args={[1, 25, 5, 512]} />
-//                 </EffectComposer>
-//             )}
-//             {/* <scene ref={scene} />
-//             <camera ref={camera} /> */}
-//             {children}
-//         </>
-//     );
-// };
-
 export default Space;
-
-// import React, { useRef, useEffect } from 'react';
-// import { Canvas, useFrame, useThree, extend } from '@react-three/fiber';
-// import { Stars, OrbitControls } from '@react-three/drei';
-// import { Bloom, EffectComposer, DepthOfField } from '@react-three/postprocessing';
-// import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
-
-
-// import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
-
-// extend({ EffectComposer, UnrealBloomPass });
-
-// const Space = (props) => {
-
-//     const weights = props.weights
-//     const layers = props.layers
-//     const neurons = props.neurons
-//     const slider = props.slider
-
-//     const currentEpoch = weights[slider];
-
-//     const stars = [];
-//     const { gl } = useThree(); // Access the WebGL renderer
-
-
-
-//     for (let layer in currentEpoch) {
-//         if (currentEpoch.hasOwnProperty(layer)) {
-//             const magnitudes = currentEpoch[layer];
-//             //console.log("ADA", magnitudes)
-//             //const scaled_magnitudes = scale_interval(magnitudes)
-//             const min = Math.min(...magnitudes);
-//             const max = Math.max(...magnitudes);
-//             let scaled = magnitudes;
-//             if (magnitudes.length > 1) {
-//                 const range = max - min;
-//                 scaled = magnitudes.map((value) => (2 * (value - min) / range) - 1);
-//                 //console.log("SKALA", scaled)
-//             }
-
-//             for (let magnitude in scaled) {
-//                 stars.push({
-//                     position: [layer, 0, 0],
-//                     brightness: scaled[magnitude],
-//                     //data: [{ x: `W${index}`, y: magnitude }],
-//                     // data: scaled.map((value, weight_index) => ({ x: `W${weight_index + 1}`, y: value }))
-//                 });
-//             }
-
-
-//         }
-//     }
-
-//     // const stars = [
-//     //     { position: [-2, 0, 0], brightness: 1 },
-//     //     { position: [0, 0, 0], brightness: 0.5 },
-//     //     { position: [2, 0, 0], brightness: 0.2 },
-//     //     // Add more stars with their positions and brightness values
-//     // ];
-//     const Star = ({ position, brightness }) => {
-//         return (
-//             <mesh position={position}>
-//                 <pointLight intensity={brightness} />
-//                 <sphereBufferGeometry args={[0.05, 16, 16]} />
-//                 <meshBasicMaterial color="#ffffff" />
-//             </mesh>
-//         );
-//     };
-//     const composer = useRef();
-
-//     useEffect(() => {
-//         if (composer.current) {
-//             const bloomPass = new UnrealBloomPass();
-//             bloomPass.strength = 1.5;
-//             bloomPass.radius = 1;
-//             bloomPass.threshold = 0;
-
-//             composer.current.addPass(bloomPass);
-
-//             return () => {
-//                 composer.current.removePass(bloomPass);
-//             };
-//         }
-//     }, [composer.current]);
-
-
-//     return (
-
-//         // <>
-//         //     <EffectComposer>
-//         //         <RenderPass />
-//         // <Bloom />
-//         <Canvas>
-
-//             <Stars>
-//                 {stars.map((star, index) => (
-//                     <Star key={index} position={star.position} brightness={star.brightness} />
-//                 ))}
-//             </Stars>
-//             <OrbitControls />
-//             <EffectComposer ref={composer} args={[gl]}>
-//                 <unrealBloomPass attachArray="passes" args={[undefined, 1.5, 0.4, 0.85]} />
-//                 <depthOfFieldPass attachArray="passes" args={[undefined, 0.5, 0.1, 0.1]} />
-//             </EffectComposer>
-//         </Canvas>
-//         //     </EffectComposer>
-//         // </>
-
-//     );
-// };
-
-// export default Space;

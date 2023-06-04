@@ -15,8 +15,18 @@
   /* margin: 10px 10px 10px 10px; */
 }
 
+.heatmap-chart .apexcharts-title-text {
+  fill: #E7842D !important;
+  /* Set the desired text color */
+}
+
+.heatmap-chart .apexcharts-legend-text {
+  color: #E7842D !important;
+}
+
+
 .layout-container {
-  width: 50vw;
+  width: 100vmin;
   height: 500px;
   display: flex;
   flex-direction: column;
@@ -44,11 +54,11 @@ ul.no-bullets {
 }
 
 .title-container {
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
+  /* flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  align-content: flex-start;
+  align-content: flex-start; */
 }
 
 .switcher {
@@ -58,14 +68,38 @@ ul.no-bullets {
 }
 
 .title {
+  display: flex;
+  width: 400px;
   font-family: 'Satoshi', sans-serif;
   font-size: 2.5em;
-  color: rgb(152, 152, 152);
+  color: rgb(160, 160, 160);
   /* text-shadow: 0 25px 50px -12px rgb(193, 33, 33); */
   text-shadow: 10px 2px 20px rgb(12, 12, 12);
-  margin: 0 0 1em 0.3em;
+  /* margin: 0 0 1em 0.3em; */
   padding: 0.3em;
 }
+
+.git {
+  width: 69vw;
+  /* height: -webkit-fill-available; */
+  display: inline-flex;
+  /* flex-direction: row; */
+  align-content: center;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+a,
+a:active,
+a:link,
+a:visited,
+a:hover {
+  color: #E7842D;
+  font-size: 20px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
 
 .box {
   width: 90px;
@@ -74,7 +108,7 @@ ul.no-bullets {
   background: #545454;
   font-size: 18px;
   font-weight: 600;
-  box-shadow: 0px 0px 30px 10px rgba(48, 48, 48, 0.7);
+  box-shadow: 0px 0px 12px 0px rgb(41, 40, 40, 0.5);
   color: #eeeeee;
   margin: 1em;
   display: flex;
@@ -165,14 +199,14 @@ ul.no-bullets {
   font-size: 20px;
   border: 5px solid #353535;
   /* I set 2 shadows where the first one doesn't have blur and spread for firefox fix. */
-  box-shadow: inset 16px 10px 2px 1px #616161, inset 2px 0px 0px 0px #616161;
+  box-shadow: inset 16px 10px 0px 1px #616161, inset 2px 0px 0px 0px #616161;
   -moz-box-shadow: inset 16px 0px #999, inset 0px 0px 0px 0px #999;
   transition: 0.5s;
   transition-timing-function: ease-in-out;
 }
 
 .moon:hover {
-  box-shadow: inset 16px 0px 2px 1px #e38d42;
+  box-shadow: inset 16px 0px 0px 1px #e38d42;
   /* box-shadow: inset 1px 2px 2px 1px #e38d42, inset 2px 2px 5px 5px #e38d42; */
   -webkit-transform: scale(1.05);
   -ms-transform: scale(1.05);
@@ -191,7 +225,7 @@ ul.no-bullets {
   font-size: 20px;
   border: 5px solid #353535;
   /* I set 2 shadows where the first one doesn't have blur and spread for firefox fix. */
-  box-shadow: inset 20px 0px 1px 20px #616161, inset 10px 10px 30px 0px #616161;
+  box-shadow: inset 20px 0px 0px 20px #616161, inset 10px 10px 30px 0px #616161;
   -moz-box-shadow: inset 16px 0px #999, inset 0px 0px 0px 0px #999;
   transition: 0.5s;
   transition-timing-function: ease-in-out;
@@ -262,31 +296,13 @@ ul.no-bullets {
 
 .class::after {
   content: "Classify";
-
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
-  /* Bring the text above the pseudo-element */
 }
 
-/* .class:hover {
-  --c: 100%;
-} */
-
-
-/* .class:hover {
-  background-image: linear-gradient(210deg, #616161 50%, rgb(76, 76, 76) 50%);
-  transform: scale(1.05);
-  background-image: -webkit-linear-gradient(210deg, #616161 50%, rgb(76, 76, 76)50%);
-  -webkit-transform: scale(1.05);
-  -ms-transform: scale(1.05);
-  transform: scale(1.05);
-  transition-property: transform;
-  transition: 0.5s;
-  transition-timing-function: ease-in-out;
-} */
 
 .App-link {
   color: #61dafb;
@@ -370,29 +386,47 @@ ul.no-bullets {
 
 .slider {
   -webkit-appearance: none;
-  width: 35%;
+  position: fixed;
+  /*zrd tega pikija gre spet use u kurc v mobile view*/
+  width: 500px;
   height: 35px;
   border-radius: 9999px;
   opacity: 0.85;
-  background: rgba(234, 234, 234, 0.3);
-  box-shadow: 0 25px 50px -12px rgba(231, 132, 45, 0.3), inset 0 0 20px #626161;
+  background: rgba(202, 202, 202, 0.3);
+  box-shadow: 0px 5px 10px 0px #272727, inset 0 0 20px #626161;
   /* box-shadow: 0 25px 50px -12px rgba(231, 132, 45, 0.3), inset 0 0 20px #626161, inset -60px 0 10px #E7842D, inset 60px 0 10px rgb(81, 81, 81); */
   /* inner white */
   ;
   outline: none;
-  padding: 0 0.5em;
+  /* padding: 0 0.5em; */
   -webkit-transition: .2s;
   transition: opacity .2s;
+
+}
+
+.sliderDiv {
+  font-size: 21px;
+  display: flex;
+  flex-direction: row;
+  /* align-content: center; */
+  justify-content: space-around;
+  align-items: center;
 }
 
 .slider:hover {
   opacity: 1;
 }
 
+.recharts-wrapper {
+  width: 600px;
+  height: 300px;
+}
+
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 40px;
+  width: 42px;
+  /* margin-left: 6px; */
   border-radius: 9999px;
   height: 25px;
   opacity: 0.7;
@@ -420,19 +454,51 @@ ul.no-bullets {
 @media (max-width: 767px) {
 
   .App {
-    width: 100vw;
-    min-height: 50vw;
-    height: 100%;
+    /* width: 120vw; */
+    /* min-height: 0vw; */
+    width: 100vmin;
+    /* height: 200vw; */
+    height: 100vmin;
+    overflow-x: scroll;
+    overflow-y: scroll;
   }
 
   .title {
     font-size: 1.5em;
   }
 
+  .switcher {
+    max-width: 100vw;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .main {
     flex-direction: column;
-    width: 100vw;
+    /* width: 100vw; */
     min-height: 100vw;
+  }
+
+  .boxGroup {
+    display: flex;
+    /* flex-wrap: nowrap; */
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+
+  .box {
+    width: 75px;
+    height: 75px;
+    font-size: 15px;
+
+    margin: 1em;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    align-content: space-between;
+    justify-content: center;
   }
 
   .subscreen {
@@ -442,7 +508,7 @@ ul.no-bullets {
   }
 
   .slider {
-    width: 100%;
+    width: 500px;
     padding: 1em;
   }
 }

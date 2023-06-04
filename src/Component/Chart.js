@@ -1,14 +1,19 @@
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
 
-export default function Chart({ data }) {
+export default function Chart({ slider, data }) {
     //const functiondata = [{ name: 'Page A', w: 100, pv: 2400, amt: 2400 }, 
     //   { name: 'Page A', w: 200, pv: 2400, amt: 2400 }, 
     //   { name: 'Page A', w: 300, pv: 2400, amt: 2400 }, 
     //   { name: 'Page A', w: 400, pv: 2400, amt: 2400 }];
     //console.log("Naš chart ima data " + data)
+    // console.log(slider)
+
+    //const chart_data = data[slider];
+    const lossy = data;
+    const lossyarray = lossy.map(x => ({ w: x }));
 
     return (
-        <LineChart width={600} height={300} data={data} margin={{ top: 20, right: 20, bottom: 0, left: 10 }}>
+        <LineChart width={600} height={300} data={lossyarray} >
             <Line type="monotone" dataKey="w" stroke="#E7842D" strokeWidth={1.5} dot={false} />
             {/* <CartesianGrid stroke="#ccc" strokeDasharray="10 10" /> */}
             <XAxis dataKey="name"
