@@ -13,7 +13,7 @@ export default function Chart({ slider, data }) {
     const lossyarray = lossy.map(x => ({ w: x }));
 
     return (
-        <LineChart width={600} height={300} data={lossyarray} >
+        <LineChart width={350} height={300} data={lossyarray} >
             <Line type="monotone" dataKey="w" stroke="#E7842D" strokeWidth={1.5} dot={false} />
             {/* <CartesianGrid stroke="#ccc" strokeDasharray="10 10" /> */}
             <XAxis dataKey="name"

@@ -172,6 +172,16 @@ export default function App() {
           {data ? <Params data={data} dataset={selectedDataset} /> : <Loading />}
         </div>
 
+
+
+      </div>
+
+      <div className="textContainer">
+        <div className="textInfo">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
       </div>
 
     </div >

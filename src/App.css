@@ -1,3 +1,6 @@
+/* @media (min-width: 1024px) {  ce mislm met tole morm kopirat vse css razrede in jih adaptat*/
+
+
 .App {
   text-align: center;
   font-family: 'Satoshi', sans-serif;
@@ -55,6 +58,7 @@ ul.no-bullets {
 
 .title-container {
   display: inline-flex;
+  width: 100vw;
   /* flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
@@ -161,6 +165,19 @@ a:hover {
   align-items: center;
   font-size: 1em;
   padding: 1em;
+}
+
+.textContainer {
+  display: flex;
+}
+
+.textInfo {
+  width: 300px;
+  /* height: 250px; */
+  font-size: 14px;
+  border-radius: 16px;
+  background-color: #E7842D;
+  color: #ffffff;
 }
 
 .App-logo {
@@ -360,21 +377,6 @@ a:hover {
   animation-delay: 0.4s;
 }
 
-
-/* 
-.sphere path {
-  fill: url(#sphereGradient);
-  stroke-width: 1px;
-  stroke: rgba(80, 80, 80, .35);
-  backface-visibility: hidden;
-}
-
-@media (min-width: 500px) {
-  .sphere path {
-    stroke-width: .4px;
-  }
-} */
-
 .visualizationRadio {
   box-shadow: 0 25px 50px -12px rgba(231, 132, 45, 0.3), inset 0 0 20px #626161;
 }
@@ -401,20 +403,24 @@ a:hover {
   /* padding: 0 0.5em; */
   -webkit-transition: .2s;
   transition: opacity .2s;
-
+  position: relative;
+  z-index: 1;
 }
 
 .sliderDiv {
+  position: relative;
   font-size: 21px;
-  display: flex;
-  flex-direction: row;
-  /* align-content: center; */
-  justify-content: space-around;
-  align-items: center;
+  margin-right: 10px;
+  z-index: 2;
 }
 
 .slider:hover {
   opacity: 1;
+}
+
+.sliderContainer {
+  display: flex;
+  align-items: center;
 }
 
 .recharts-wrapper {
@@ -450,10 +456,16 @@ a:hover {
   background: #E7842D;
 }
 
-/*for phones*/
+/* } */
+
+/* MOBILE */
 @media (max-width: 767px) {
 
   .App {
+    text-align: center;
+    font-family: 'Satoshi', sans-serif;
+    background-color: #353535;
+    min-height: 100vh;
     /* width: 120vw; */
     /* min-height: 0vw; */
     width: 100vmin;
@@ -461,6 +473,30 @@ a:hover {
     height: 100vmin;
     overflow-x: scroll;
     overflow-y: scroll;
+  }
+
+  .slider {
+    width: 95vw;
+    padding: 1em;
+    margin: 10px;
+  }
+
+  .boxGroup {
+    width: 100vw;
+  }
+
+  .box {
+    font-size: 13px;
+  }
+
+  .sliderContainer {
+    width: 80vw;
+  }
+
+  .title-container {
+    width: 100vw;
+    font-size: 18px;
+    padding-right: 10px;
   }
 
   .title {
@@ -502,25 +538,50 @@ a:hover {
   }
 
   .subscreen {
-    flex-direction: row;
+    flex-direction: column;
     font-size: 0.8em;
     padding: 0.5em;
   }
 
-  .slider {
-    width: 500px;
-    padding: 1em;
-  }
 }
 
-/* Styles for tablets */
+/* TABLETS */
 @media (min-width: 768px) and (max-width: 1023px) {
   .App {
     text-align: center;
     font-family: 'Satoshi', sans-serif;
     background-color: #353535;
     min-height: 100vh;
+    width: 100vmin;
+    /* height: 200vw; */
+    height: 100vmin;
+    overflow-x: scroll;
+    overflow-y: scroll;
     /* background-image: linear-gradient(to right, #E7842D, #353535); */
+  }
+
+  .main {
+    flex-direction: column;
+  }
+
+  .switcher {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .boxGroup {
+    display: flex;
+    /* flex-wrap: nowrap; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    flex-direction: row;
+  }
+
+  .title-container {
+    width: 100vw;
+    font-size: 18px;
+    padding-right: 10px;
   }
 
   .font-link {

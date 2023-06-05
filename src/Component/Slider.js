@@ -19,15 +19,18 @@ const Slider = React.memo(({ onSliderValueChange }) => {
     }, [onSliderValueChange]);
 
     return (
-        <div className="sliderDiv">
-            <span>Epoch: {epoch}</span>
-            <input
-                type="range"
-                min="0" max="99"
-                name="epoch"
-                value={sliderValue}
-                onChange={handleSliderChange}
-                className="slider" />
+        <div className="sliderContainer">
+            <div className="sliderDiv">
+                <span>Epoch: {epoch}</span>
+
+                <input
+                    type="range"
+                    min="0" max="99"
+                    name="epoch"
+                    value={sliderValue}
+                    onChange={handleSliderChange}
+                    className="slider" />
+            </div>
         </div>
     );
 });
