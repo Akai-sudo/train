@@ -15,7 +15,6 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { BloomPass } from 'three/examples/jsm/postprocessing/BloomPass';
 
 
-
 // import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 
 // import StarLine from './StarLine';
@@ -27,7 +26,7 @@ extend(THREE)
 const Space = (props) => {
     // const state = useThree()
     const [hovered, hover] = useState(false);
-    const [bloomEnabled, setBloomEnabled] = useState(true); // State variable to track bloom effect
+    const [bloomEnabled, setBloomEnabled] = useState(true);
     const weights = props.weights; //allweights je weightsdict, weights je magnitudes
     const layers = props.layers;
     const neurons = props.neurons;
@@ -47,9 +46,20 @@ const Space = (props) => {
 
     console.log("Epoch: ", currentEpoch)
 
+    function getRandomPointOnSphere(radius) {
+        const u = Math.random();
+        const v = Math.random();
+        const theta = 2 * Math.PI * u;
+        const phi = Math.acos(2 * v - 1);
+        const x = radius * Math.sin(phi) * Math.cos(theta);
+        const y = radius * Math.sin(phi) * Math.sin(theta);
+        const z = radius * Math.cos(phi);
+        return [x, y, z];
+    }
+
     useEffect(() => {
         const newStars = [];
-        const newStarLines = []; // Array to store the star lines
+        const newStarLines = [];
 
         for (let layer in currentEpoch) {
             if (currentEpoch.hasOwnProperty(layer)) {
@@ -65,12 +75,32 @@ const Space = (props) => {
                 for (let index = 0; index < layer_neurons.length; index++) {
                     // for (let index = 0; index < scaled.length; index++) {
                     const neuron_connections = layer_neurons[index]
-                    for (let neuron_index = 0; neuron_index < neuron_connections.length; neuron_index++)
-
+                    for (let neuron_index = 0; neuron_index < neuron_connections.length; neuron_index++) {
                         newStars.push({
-                            position: [Math.random(), Math.random(), Math.random()],
+                            // position: [layer, Math.random(), Math.random()],
+                            // position: [index % 10, Math.floor(index / 10), 0],
+                            position: getRandomPointOnSphere(2),
                             brightness: neuron_connections[neuron_index],
                         });
+
+                        if (index > 0) {
+                            // if (index < scaled.length - 1) {
+                            newStarLines.push({
+                                startPosition: newStars[index - 1].position,
+                                endPosition: newStars[index].position,
+                            });
+                        }
+                    }
+
+                    if (index > 0) {
+                        // if (index < scaled.length - 1) {
+                        newStarLines.push({
+                            startPosition: newStars[index - 1].position,
+                            endPosition: newStars[index].position,
+                        });
+                    }
+
+
                     // newStars.push({
                     //     position: [layer, Math.random(Math.cos(layer)), Math.random(Math.cos(index))],
                     //     brightness: scaled[index],
@@ -92,6 +122,7 @@ const Space = (props) => {
             }
         }
         setStars(newStars);
+        console.log("New stars: ", newStars);
         setStarLines(newStarLines);
     }, [currentEpoch, weights, layers, neurons, slider]);
 

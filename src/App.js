@@ -1,16 +1,6 @@
 import { useEffect, useState } from "react";
-// import logo from "./logo.svg";
 import "./App.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-// import loss from "./loss.svg"
-// import heatmap from "./heatmap.svg"
-
-// import { Canvas } from "@react-three/fiber";
-//import Shape from "./Component/Shape";
-// import ColorSpace from "./Component/ColorSpace";
-// import Chart from "./Component/Chart";
-// import Heatmap from "./Component/Heatmap";
 import Loading from "./Component/Loading";
 import LayoutSwitcher from "./Component/LayoutSwitcher"
 
@@ -19,11 +9,8 @@ import { useSpring, animated } from '@react-spring/web'
 
 
 import { Globals } from "@react-spring/shared";
-import Slider from "./Component/Slider";
 import Params from "./Component/Params";
 
-// import * as THREE from "three";
-//import { OrbitControls } from '@react-three/drei'
 
 Globals.assign({
   frameLoop: "always",
@@ -43,16 +30,9 @@ export default function App() {
 
   const [selectedDataset, setDataset] = useState('Moons')
 
-  // const datasetHandler = (event) => {
-  //     console.log("changed!")
-  //     setDataset(event.target.value);
-  //     console.log(selectedDataset);
-  // };
-
   const datasetHandler = (dataset) => {
     //console.log(dataset)
     setDataset(dataset);
-    //console.log("yaas")
   };
 
   //console.log(selectedDataset)
@@ -110,11 +90,10 @@ export default function App() {
 
   //console.log("Magnitude:", weights)
   //console.log(weights)
-  console.log("Aktivacija ", activations)
+  console.log("Aktivacije outputov nevronov ", activations)
   // console.log("Activations are: " + activations)
-  const lossy = lossdata;
-  const lossyarray = lossy.map(x => ({ w: x }));
-
+  // const lossy = lossdata;
+  // const lossyarray = lossy.map(x => ({ w: x }));
 
   return (
     <div className="App">

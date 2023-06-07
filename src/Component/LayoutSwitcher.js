@@ -28,12 +28,9 @@ const LayoutSwitcher = (props) => {
     // const weights = props.weights
 
     const [externalValue, setExternalValue] = useState(0);
-    // const [epoch, setEpoch] = useState(0);
 
     const handleSliderValueChange = (value) => {
         setExternalValue(value);
-        // const current = Number(value) + 1;
-        // setEpoch(Number(value) + 1)
     };
 
     const opacityProps = useSpring({
@@ -45,7 +42,6 @@ const LayoutSwitcher = (props) => {
 
     const [selectedLayout, setSelectedLayout] = useState('Loss curve');
     const handleLayoutChange = (layout) => {
-        //console.log("changed!")
         setSelectedLayout(layout);
     };
 

@@ -2,7 +2,6 @@ import ReactApexChart from 'react-apexcharts';
 import { useEffect, useState } from "react";
 import React from "react";
 
-
 function Heatmap(props) {
     const weights = props.weights
     const layers = props.layers
@@ -53,7 +52,7 @@ function Heatmap(props) {
             height: 500,
             width: 1000,
             type: 'heatmap',
-            background: '#353535', // Set the background color here
+            background: '#353535',
             animations: {
                 disabled: false,
             },

@@ -1,9 +1,6 @@
 from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split
-# from sklearn.neural_network import MLPClassifier
-# from sklearn.metrics import confusion_matrix, accuracy_score
-# import sklearn.datasets as ds
-# from sklearn import linear_model
+from sklearn.decomposition import PCA
 
 from syndata import generateMoons, generateCircles, generateClass
 
@@ -15,7 +12,7 @@ import keras.backend as K
 # from keras.layers import Dense
 import keras
 from keras.models import Sequential
-from keras.layers import Dense, GlobalAveragePooling1D, Flatten
+from keras.layers import Dense
 from keras.callbacks import ModelCheckpoint
 from keras.callbacks import LambdaCallback
 
@@ -68,22 +65,6 @@ class NumpyEncoder(json.JSONEncoder):
 #     else:
 #         return data
 
-def extract_relu_activations(epoch_activations, epoch, activations_dict):
-    relu_activations = []
-    if epoch not in activations_dict:
-        activations_dict[epoch] = {}
-    for activation in epoch_activations:
-        relu_activation = np.maximum(activation, 0)
-        relu_activations.append(relu_activation)
-    #activations_dict[epoch] = relu_activation
-    
-    # Extract activation values for output layers
-    output_activations = relu_activations[-1]  # Assuming output activations are the last elements
-    
-    activations_dict[epoch] = output_activations
-    
-
-    #return relu_activations
 
 # def neuron_weights_callback(epoch, logs, model, weights_dict):
 #     layer_index = 0
@@ -128,6 +109,45 @@ def extract_relu_activations(epoch_activations, epoch, activations_dict):
 
 #magnitude_dict = {}
 
+# def extract_relu_activations(epoch_activations, epoch, activations_dict):
+#     relu_activations = []
+#     if epoch not in activations_dict:
+#         activations_dict[epoch] = {}
+#     for activation in epoch_activations:
+#         relu_activation = np.maximum(activation, 0)
+#         relu_activations.append(relu_activation)
+#     #activations_dict[epoch] = relu_activation
+    
+#     # Extract activation values for output layers
+#     output_activations = relu_activations[-1]  # Assuming output activations are the last elements
+    
+#     activations_dict[epoch] = output_activations
+    
+
+#     #return relu_activations
+
+def extract_relu_activations(epoch, logs, model, activations_dict):
+    activations = []
+    if epoch not in activations_dict:
+        activations_dict[epoch] = {}
+
+    layer_index = 0
+    for layer in model.layers:
+        if isinstance(layer, Dense):
+            output_activations = np.array(layer.output)
+            # activations_dict[epoch] = output_activations.tolist()
+            activations.append(output_activations)
+
+
+    activations_dict[epoch] = activations
+    
+    # Extract activation values for output layers
+    # output_activations = relu_activations[-1]  
+    
+    # activations_dict[epoch] = output_activations
+    
+    # return relu_activations
+
 def neuron_weights_callback(epoch, logs, model, magnitudes_dict, weights_dict):
     # if epoch not in magnitudes_dict:
     #     magnitudes_dict[epoch] = {}
@@ -148,69 +168,6 @@ def neuron_weights_callback(epoch, logs, model, magnitudes_dict, weights_dict):
             weights_dict[epoch][layer_index] = weights.tolist()
         layer_index += 1
 
-# def activation_values_callback(epoch, logs, model, activations_dict, X_train):
-#     # layer_index = 0
-#     # #activations = []
-#     # for layer in model.layers:
-#     #     if isinstance(layer, Dense):
-#     #         if epoch not in activations_dict:
-#     #             activations_dict[epoch] = {}
-            
-#     #         input = layer.input
-#     #         output = layer.output
-#     #         activation_function = K.function([input], [output])
-#     #         reshaped = np.reshape([X_train], (-1, 32))
-#     #         calculate_activation = activation_function(reshaped)
-#     #         #activations.append(calculate_activation)
-#     #         activations_dict[epoch][layer_index] = calculate_activation
-#         #layer_index += 1
-
-#     if epoch not in activations_dict:
-#         activations_dict[epoch] = {}
-
-#     activations = []
-#     for i in range(len(model.layers)):
-#         layer_input = model.layers[i].input
-#         layer_output = model.layers[i].output
-#         activation_fn = K.function([layer_input], [layer_output])
-#         train_np = np.array(X_train)
-#         reshaped = train_np.reshape(-1, 32)
-
-#         activation = activation_fn([reshaped])
-#         activations.append(activation)
-#         activations_dict[epoch][i] = activations
-
-          
-    # activations = []
-    # for i in range(len(model.layers)):
-    #     layer_input = model.layers[i].input
-    #     layer_output = model.layers[i].output
-    #     activation_fn = K.function([layer_input], [layer_output])
-    #     activation = activation_fn([X_train])
-    #     activations.append(activation)
-    # layer_activations.append(activations)
-
-    
-    # currentLayer = 0
-    # for layer in model.layers:
-    #     if isinstance(layer, Dense):
-            
-    #         weights = layer.get_weights()[0]  # Get the weight matrix of the layer
-    #         weights_in_layer = weights.T.tolist()
-    #         #weights_dict.update({epoch:weights})
-    #         # reshaped_weights = weights.T.reshape(-1)
-    #         weights_dict[epoch] = weights.tolist()
-    #         currentLayer += 1
-    #         #neuron_index = 0
-    #         # for neuron_weights in weights.T.reshape(-1):
-    #         #     weights_dict[epoch].update({currentLayer, neuron_weights})
-    #         #     #weights_dict[(currentLayer, neuron_index)] = neuron_weights.tolist()
-                
-    #         #     neuron_index += 1
-    #     #currentLayer += 1
-
-# def linearReg():
-#     regression_model = linear_model.LinearRegression()
 # In the neural network terminology:
 
 # one epoch = ONE FORWARD PASS AND ONE BACKWARD PASS of all the training examples
@@ -250,8 +207,6 @@ def generateNetwork(dataset):
     
     X_train, X_test, y_train, y_test = train_test_split(features_x, labels_y, train_size=0.8, test_size=0.2, random_state=42)
 
-
-
     model = Sequential()
     model.add(Dense(neuron_num, kernel_constraint=Between(-1,1), activation='relu', input_dim=2))
     model.add(Dense(neuron_num,kernel_constraint=Between(-1,1), activation='relu'))
@@ -287,25 +242,76 @@ def generateNetwork(dataset):
     magnitudes_dict = {}
     activations_dict = {}
 
-    # weight_callback = LambdaCallback \
-    # ( on_epoch_end=lambda epoch, logs: weights_dict.update({epoch:model.get_weights()}))
-
-    # weight_callback = LambdaCallback(on_epoch_end=lambda epoch, logs: neuron_weights_callback(epoch, logs, model, weights_dict)
-    # )
 
     weight_callback = LambdaCallback(on_epoch_end=lambda epoch, logs: neuron_weights_callback(epoch, logs, model, magnitudes_dict, weights_dict))
-    #activation_callback = LambdaCallback(on_epoch_end=lambda epoch, logs: activation_values_callback(epoch, logs, model, activations_dict, X_train))
+    activation_callback = LambdaCallback(on_epoch_end=lambda epoch, logs: extract_relu_activations(epoch, logs, model, activations_dict))
+    activations = []
 
-    #activation_callback = LambdaCallback(on_epoch_end=lambda epoch, logs: relu_activations.append(extract_relu_activations(K.function([model.layers[0].input], [model.layers[0].output])([X_train], epoch, activations_dict))))
+    # Define the lambda callback to extract activations
+    layer_indices = [0,1]
     activation_callback = LambdaCallback(
-        on_epoch_end=lambda epoch, logs: relu_activations.append(
-            extract_relu_activations(
-                K.function([model.layers[0].input], [model.layers[0].output])([X_train]),
-                epoch,
-                activations_dict
-            )
+        on_epoch_end=lambda epoch, logs: activations.append(
+            [layer.output for layer_idx, layer in enumerate(model.layers) if layer_idx in layer_indices]
         )
     )
+
+    inputs = X_train
+
+    # Create a function to extract the output activations
+    get_activations = K.function([model.input], [layer.output for layer in model.layers])
+
+
+    # Get the output activations
+    activations = get_activations([inputs])
+
+    # activations = [np.random.rand(120, 32), np.random.rand(120, 32), np.random.rand(120, 32)]
+
+    # # Reshape the arrays to have a consistent shape
+    # activations_homogeneous = [arr.reshape(120, -1) for arr in activations]
+    #activations_concatenated = np.concatenate(activations, axis=0)
+
+    pca_activations = []
+
+    activation_idx = 0
+    for activation in activations:
+        #num_components = min(activation.shape[1], 2)  # Set num_components to the smaller of 2 or the number of features in the activation array
+        # if activation_idx < 2:
+        pca = PCA(n_components=1)
+        pca_result = pca.fit_transform(activation)
+        pca_activations[activation_idx] = pca_result
+        activation_idx += 1
+
+
+    # pca = PCA(n_components=2)  #principal component analysis
+    # pca.fit(activations)
+    # pca_activations = pca.transform(activations)  # dimenzionalna redukcija
+
+    # max_length = max(len(arr) for arr in pca_activations)
+
+    # pca_activations_homogeneous = np.array([np.pad(arr, (0, max_length - len(arr)), mode='constant') for arr in pca_activations])
+
+    activations_dict = {}
+    for layer_idx, layer_activations in enumerate(activations):
+        activations_dict[layer_idx] = layer_activations.tolist()
+    # activation_callback = LambdaCallback(
+    #     on_epoch_end=lambda epoch, logs: relu_activations.append(
+    #         extract_relu_activations(
+    #             K.function([model.layers[0].input], [model.layers[0].output])([X_train]),
+    #             epoch,
+    #             activations_dict
+    #         )
+    #     )
+    # )
+    #nedela activation_callback = LambdaCallback(on_epoch_end=lambda epoch, logs: relu_activations.append(extract_relu_activations(K.function([model.layers[0].input], [model.layers[0].output])([X_train], epoch, activations_dict))))
+    
+
+    # activation_callback = LambdaCallback(
+    #     on_epoch_end=lambda epoch, logs: extract_relu_activations(epoch, logs, model, activations_dict)
+
+    #     # activations.append(
+    #     # [layer.output for layer_idx, layer in enumerate(model.layers) if layer_idx in layer_indices]
+    # )
+
     # scaler = MinMaxScaler(feature_range=(0, 1))
     # scaler.fit(X_train)
     # scaled_x = scaler.transform(X_train)
@@ -315,8 +321,10 @@ def generateNetwork(dataset):
 
     trained_model = model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs_num, callbacks=[weight_callback, activation_callback])
 
+    # loss, accuracy = model.evaluate(X_train, y_test)
 
     loss_values = trained_model.history['loss']
+    # accuracy = trained_model.history['accuracy']
 
     weights_array = np.array(list(weights_dict.values()))
 
@@ -325,7 +333,7 @@ def generateNetwork(dataset):
     network_params['loss'] = loss_values
     network_params['all_weights'] = weights_dict
     network_params['weights'] = magnitudes_dict
-    network_params['activations'] = activations_dict
+    network_params['activations'] = pca_activations
     network_params['neurons'] = neuron_num
     network_params['epochs'] = epochs_num
     network_params['layers'] = (len(model.layers)-1)

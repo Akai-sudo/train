@@ -169,6 +169,9 @@ a:hover {
 
 .textContainer {
   display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding-left: 10vw;
 }
 
 .textInfo {
@@ -178,6 +181,7 @@ a:hover {
   border-radius: 16px;
   background-color: #E7842D;
   color: #ffffff;
+  padding: 8px;
 }
 
 .App-logo {
@@ -421,6 +425,7 @@ a:hover {
 .sliderContainer {
   display: flex;
   align-items: center;
+
 }
 
 .recharts-wrapper {
@@ -458,7 +463,7 @@ a:hover {
 
 /* } */
 
-/* MOBILE */
+/* MOBILE **********************************************************/
 @media (max-width: 767px) {
 
   .App {
@@ -471,7 +476,7 @@ a:hover {
     width: 100vmin;
     /* height: 200vw; */
     height: 100vmin;
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: scroll;
   }
 

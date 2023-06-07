@@ -14,8 +14,6 @@ cors = CORS(app, resources={r"/": {"origins": "*"}})
 def deploymlp():
 
     dataset = request.json.get('selectedDataset')
-
-    print("We want dataset: ", dataset)
     networkparams = {}
     networkparams = generateNetwork(dataset)
 
