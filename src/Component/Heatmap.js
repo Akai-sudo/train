@@ -52,7 +52,7 @@ function Heatmap(props) {
             height: 500,
             width: 1000,
             type: 'heatmap',
-            background: '#353535',
+            background: '#353535', // Set the background color here
             animations: {
                 disabled: false,
             },

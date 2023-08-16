@@ -27,10 +27,10 @@ const LayoutSwitcher = (props) => {
     // const neuron_number = props.neurons
     // const weights = props.weights
 
-    const [externalValue, setExternalValue] = useState(0);
+    const [sliderValue, setsliderValue] = useState(0);
 
     const handleSliderValueChange = (value) => {
-        setExternalValue(value);
+        setsliderValue(value);
     };
 
     const opacityProps = useSpring({
@@ -45,15 +45,23 @@ const LayoutSwitcher = (props) => {
         setSelectedLayout(layout);
     };
 
+    const hideSlider = {
+        visibility: "hidden",
+    };
+
     const renderLayout = () => {
         if (selectedLayout === 'Loss curve') {
-            return (props.neurons ? <Chart slider={externalValue} data={props.lossyarray} /> : <Loading />);
+            return (props.neurons ? <Chart slider={sliderValue} data={props.lossyarray} /> : <Loading />);
         } else if (selectedLayout === 'Heatmap') {
-            return (props.neurons ? <Heatmap slider={externalValue} neurons={props.neurons} weights={props.weights} layers={props.layers} /> : <Loading />);
+            return (props.neurons ? <Heatmap slider={sliderValue} neurons={props.neurons} weights={props.weights} layers={props.layers} /> : <Loading />);
         } else if (selectedLayout === 'Space') {
-            return (props.neurons ? <Space slider={externalValue} neurons={props.neurons} weights={props.allweights} layers={props.layers} /> : <Loading />);
+            return (props.neurons ? <Space slider={sliderValue} neurons={props.neurons} weights={props.allweights} layers={props.layers} /> : <Loading />);
         } else if (selectedLayout === 'Signal') {
-            return <Signal />
+            return (
+
+                props.neurons ? <Signal slider={sliderValue} activations={props.activations} /> : <Loading />
+
+            );
         }
         return null;
     };
@@ -82,7 +90,13 @@ const LayoutSwitcher = (props) => {
                     <div>{selectedLayout === "Space" ? null : selectedLayout}</div>
                     {renderLayout()}
 
-                    <Slider onSliderValueChange={handleSliderValueChange} />
+                    {selectedLayout === "Loss curve"
+                        ?
+                        <div style={hideSlider}>
+                            <Slider onSliderValueChange={handleSliderValueChange} />
+                        </div> :
+                        <Slider onSliderValueChange={handleSliderValueChange} />
+                    }
                     {/* </animated.div> */}
                 </div>
             </div>

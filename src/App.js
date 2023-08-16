@@ -4,7 +4,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Loading from "./Component/Loading";
 import LayoutSwitcher from "./Component/LayoutSwitcher"
 
-
 import { useSpring, animated } from '@react-spring/web'
 
 
@@ -15,6 +14,7 @@ import Params from "./Component/Params";
 Globals.assign({
   frameLoop: "always",
 });
+
 
 
 export default function App() {
@@ -29,7 +29,6 @@ export default function App() {
   const [activations, setActivations] = useState(0)
 
   const [selectedDataset, setDataset] = useState('Moons')
-
   const datasetHandler = (dataset) => {
     //console.log(dataset)
     setDataset(dataset);
@@ -37,6 +36,10 @@ export default function App() {
 
   //console.log(selectedDataset)
   console.log(JSON.stringify({ selectedDataset }))
+
+  const waitDatasetLoad = {
+    visibility: "hidden",
+  };
 
   const titleProps = useSpring({
     config: { duration: 1000 },
@@ -96,6 +99,7 @@ export default function App() {
   // const lossyarray = lossy.map(x => ({ w: x }));
 
   return (
+
     <div className="App">
 
       <div className="title-container">
@@ -129,25 +133,42 @@ export default function App() {
 
       <div className="main">
 
-        <LayoutSwitcher data={data} lossyarray={lossdata} neurons={neurons} weights={weights} allweights={allWeights} layers={layers} />
+        <LayoutSwitcher data={data} lossyarray={lossdata} activations={activations} neurons={neurons} weights={weights} allweights={allWeights} layers={layers} />
 
         <div className="subscreen">
 
 
+
           <animated.div
             style={{
-              ...opacityProps,
+              ...titleProps,
             }}
           >
-
           </animated.div>
 
-          <div>
+          {data ?
+            <div >
+              <button className="circle" value="Circles" onClick={() => datasetHandler("Circles")}>Circles</button>
+              <button className="moon" value="Moons" onClick={() => datasetHandler("Moons")}>Moons</button>
+              <button className="class" value="Classification" onClick={() => datasetHandler("Classification")}>Classify</button>
+
+            </div> :
+            <div style={waitDatasetLoad}>
+              <button className="circle" value="Circles" onClick={() => datasetHandler("Circles")}>Circles</button>
+              <button className="moon" value="Moons" onClick={() => datasetHandler("Moons")}>Moons</button>
+              <button className="class" value="Classification" onClick={() => datasetHandler("Classification")}>Classify</button>
+
+            </div>
+
+          }
+          {/* <div style={waitDatasetLoad}>
             <button className="circle" value="Circles" onClick={() => datasetHandler("Circles")}>Circles</button>
             <button className="moon" value="Moons" onClick={() => datasetHandler("Moons")}>Moons</button>
             <button className="class" value="Classification" onClick={() => datasetHandler("Classification")}>Classify</button>
 
-          </div>
+          </div> */}
+
+
           {data ? <Params data={data} dataset={selectedDataset} /> : <Loading />}
         </div>
 
@@ -157,9 +178,33 @@ export default function App() {
 
       <div className="textContainer">
         <div className="textInfo">
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          <h4>Loss Curve</h4><br></br>
+          <p>The loss curve represents the optimisation of error rate throughout all epochs. This is achieved by optimising the loss curve by
+            searching for local minima with gradient descent.
+          </p>
+        </div>
 
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <div className="textInfo">
+          <h4>Heatmap</h4><br></br>
+          <p>The heatmap represents the values of weights for every neuron in every layer. The weight values are a high dimensional tensor so to
+            visualize the importance of weights in 2D we apply a dimensionality reduction method by calculating the weight magnitudes. The weights are then
+            layed out along the X axis, for every layer on the Y axis. The color scale helps us quickly extract which neurons were of
+            significant importance and which weren't.
+          </p>
+        </div>
+
+        <div className="textInfo">
+          <h4>Stars</h4><br></br>
+          <p>The loss curve represents the optimisation of error rate throughout all epochs. This is achieved by optimising the loss curve by
+            searching for local minima with gradient descent.
+          </p>
+        </div>
+
+        <div className="textInfo">
+          <h4>Activation signal</h4><br></br>
+          <p>The loss curve represents the optimisation of error rate throughout all epochs. This is achieved by optimising the loss curve by
+            searching for local minima with gradient descent.
+          </p>
         </div>
       </div>
 

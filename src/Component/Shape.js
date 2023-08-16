@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useSpring, animated, config } from '@react-spring/three';
 

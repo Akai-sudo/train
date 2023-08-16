@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { LineChart, Line, Tooltip, XAxis, YAxis } from 'recharts';
 
 export default function Chart({ slider, data }) {
@@ -11,18 +12,40 @@ export default function Chart({ slider, data }) {
     //const chart_data = data[slider];
     const lossy = data;
     const lossyarray = lossy.map(x => ({ Loss: x }));
+    // const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    // const [screenHeight, setScreenHeight] = useState(window.innerHeight);
+
+    // const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    const [chartWidth, setChartWidth] = useState(600);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.matchMedia("(max-width: 767px)").matches) {
+                setChartWidth(420);
+            } else {
+                setChartWidth(600);
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+
+
+    }, []);
 
     return (
-        <LineChart width={600} height={300} data={lossyarray} >
-            <Line type="monotone" dataKey="Loss" stroke="#E7842D" strokeWidth={1.5} dot={false} />
-            {/* <CartesianGrid stroke="#ccc" strokeDasharray="10 10" /> */}
-            <XAxis dataKey="name"
+        <div className="loss_chart">
+            <LineChart width={chartWidth} height={300} data={lossyarray} >
+                <Line type="monotone" dataKey="Loss" stroke="#E7842D" strokeWidth={1.5} dot={false} />
+                {/* <CartesianGrid stroke="#ccc" strokeDasharray="10 10" /> */}
+                <XAxis dataKey="name"
 
-            />
-            <YAxis type="number"
-                tickFormatter={(value) => value.toFixed(2)} />
-            <Tooltip formatter={(value) => value.toFixed(5)}
-            />
-        </LineChart>
+                />
+                <YAxis type="number"
+                    tickFormatter={(value) => value.toFixed(2)} />
+                <Tooltip formatter={(value) => value.toFixed(5)} contentStyle={{ fontSize: '17px' }}
+                />
+            </LineChart>
+        </div>
     );
 }
