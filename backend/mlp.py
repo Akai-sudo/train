@@ -24,9 +24,9 @@ import pandas as pd
 import json
 import numpy as np
 
-import tensorly as tl
-from tensorly.decomposition import tucker
-from tensorly.decomposition import parafac
+# import tensorly as tl
+# from tensorly.decomposition import tucker
+# from tensorly.decomposition import parafac
 
 # from syndata import scale_data
 
