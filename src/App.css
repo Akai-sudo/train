@@ -1094,6 +1094,21 @@
     /* margin: 10px 10px 10px 10px; */
   }
 
+  .activations {
+    display: flex;
+    align-items: stretch;
+    flex-direction: row;
+  }
+
+  .layers {
+    font-size: 19px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: baseline;
+    padding: 27px;
+  }
+
   .heatmap-chart .apexcharts-title-text {
     fill: #E7842D !important;
     /* Set the desired text color */
