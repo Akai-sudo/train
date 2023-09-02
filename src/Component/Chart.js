@@ -18,12 +18,15 @@ export default function Chart({ slider, data }) {
     // const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
     const [chartWidth, setChartWidth] = useState(600);
+    const [chartHeight, setChartHeight] = useState(300);
 
     useEffect(() => {
         const handleResize = () => {
             if (window.matchMedia("(max-width: 767px)").matches) {
                 setChartWidth(420);
+                setChartHeight(225);
             } else {
+                setChartHeight(300);
                 setChartWidth(600);
             }
         };
@@ -35,7 +38,7 @@ export default function Chart({ slider, data }) {
 
     return (
         <div className="loss_chart">
-            <LineChart width={chartWidth} height={300} data={lossyarray} >
+            <LineChart width={chartWidth} height={chartHeight} data={lossyarray} >
                 <Line type="monotone" dataKey="Loss" stroke="#E7842D" strokeWidth={1.5} dot={false} />
                 {/* <CartesianGrid stroke="#ccc" strokeDasharray="10 10" /> */}
                 <XAxis dataKey="name"
