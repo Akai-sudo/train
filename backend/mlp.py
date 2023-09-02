@@ -1,15 +1,17 @@
-from sklearn.datasets import load_digits
+#from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split
+
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
+from sklearn.manifold import Isomap
 from scipy.linalg import svd
+
+from keras.layers import LayerNormalization
 
 from syndata import generateMoons, generateCircles, generateClass
 
 from keras.constraints import Constraint
 import keras.backend as K
-
-from sklearn.feature_selection import SelectKBest, f_regression
 
 
 from keras.models import Sequential
@@ -55,7 +57,9 @@ class NumpyEncoder(json.JSONEncoder):
 
 def neuron_weights_callback(epoch, logs, model, magnitudes_dict, weights_dict):
     layer_index = 0
+    isomap_result = []
     for layer in model.layers:
+        print("\n Layer: ", layer_index)
         if isinstance(layer, Dense):
             if epoch not in magnitudes_dict:
                 magnitudes_dict[epoch] = {}
@@ -64,47 +68,131 @@ def neuron_weights_callback(epoch, logs, model, magnitudes_dict, weights_dict):
             # if layer_index not in magnitudes_dict[epoch]:
             #     magnitudes_dict[epoch][layer_index] = []
 
+            #pridobljene utezi
             weights = layer.get_weights()[0]
 
-            
             scaler = MinMaxScaler()
+            # scaled_weights = scaler.fit_transform(weights)
+
+            #magnitude dobljenit utezi v LIST, HEATMAP
+            weight_magnitudes = np.abs(weights.mean(axis=0)).tolist()   
+
+            #vsota uteži trenutnega nevrona, OZVEZDJE
+            weighted_sum = np.sum(weights, axis=0)
+
+            #povprečna vsota uteži nevrona, prvi layer ima uteži blizu 0, OZVEZDJE
+            if layer_index != 0:
+                weighted_sum = weighted_sum / 32
+
+            reshaped_sum = np.array(weighted_sum).reshape(-1, 1)
+
+            scaled_sums = scaler.fit_transform(reshaped_sum)
+            
+            # print("\n Weighted avg sum: ", weight_sum_avg)
+
+            # print("\nLayer: ", layer_index)
+            # print("\nShape: ", weights.shape)
+            # print("\n")
+            
+            #print("W",weights.shape)
+            # scaler = MinMaxScaler()
+            # scaled_weights = scaler.fit_transform(weights)
+            # pca = PCA(n_components=1)
+            # pca_weights = pca.fit_transform(weights)
+            # scaled_pca_weights = scaler.fit_transform(pca_weights)
+
+
+            # if weights.shape[0] > 2:
+            #     n_components = 3
+            #     n_neighbors = 16
+
+            #     isomap = Isomap(n_neighbors=n_neighbors, n_components=n_components)
+            #     isomap_result = isomap.fit_transform(scaled_weights)
+
+            #     x = isomap_result[:, 0]
+            #     y = isomap_result[:, 1]
+            #     z = isomap_result[:, 2]
+
+            #     fig = plt.figure()
+            #     ax = fig.add_subplot(111, projection='3d')
+            #     ax.scatter(x, y, z)
+            #     ax.set_xlabel('Component 1')
+            #     ax.set_ylabel('Component 2')
+            #     ax.set_zlabel('Component 3')
+            #     # plt.show()
+            #     plt.savefig('iso.png')
+
+
+
+            # all_matrices.append(weights_scaled.flatten())
+
+            # n_samples = weights_scaled.shape[0]
+            # if n_samples >= 5:
+            #     isomap = Isomap(n_neighbors=5, n_components=3)
+            #     isomap_result = isomap.fit_transform(weights_scaled)
+                
+            #     magnitudes_dict[epoch][layer_index] = isomap_result.tolist()
+            # else:
+            #     print("Insufficient data dimensions for Isomap.")
+
+            # isomap = Isomap(n_neighbors=5, n_components=3)
+            # isomap_result = isomap.fit_transform(weights_scaled)
+
+            #weights_scaled_transposed = weights_scaled.T #transponiraj pred isomapom
+            # print("W scaled", weights_scaled.shape)
+
+            # tsne = TSNE(n_components=3, perplexity=5, random_state=42)
+            # tsne_weights = tsne.fit_transform(weights_scaled)
+
+            # weight_magnitudes = np.abs(weights.mean(axis=0)).tolist()
+
+            # magnitude_array = np.array(weight_magnitudes)
+
+            # n_components = 3
+            # isomap = Isomap(n_neighbors=5, n_components=n_components)
+            # isomap_result = isomap.fit_transform(weights_scaled_transposed)
+
+
+            # print("W scaled magnitudes", len(weight_magnitudes))
+
+            # magnitudes_dict[epoch][layer_index] = weight_magnitudes
+            # weights_dict[epoch][layer_index] = tsne_weights.tolist()
+
             # scaler.fit(weights)
             # scaled_weights = scaler.transform(weights)
             #scaled_weights = scaler.fit_transform(weights)
-            pca = PCA(n_components=1)  # Specify the desired number of components
-            pca_weights = pca.fit_transform(weights)
-            scaled_pca_weights = scaler.fit_transform(pca_weights)
 
-            # weight_tensor = np.expand_dims(weights, axis=2)
-            # weight_tensor = np.expand_dims(weights, axis=2)
-            # rank = 10
-            # factors = parafac(weight_tensor, rank=rank)
-            # reconstructed_weights = tl.cp_to_tensor(factors)
-            # reduced_weights = reconstructed_weights[:, :, 0]
-            # rank = 3
-            # core, factors = tucker(weight_tensor, rank=rank)
-            # reconstructed_weight_tensor = tl.tucker_to_tensor((core, factors))
-            # reconstructed_weights = reconstructed_weight_tensor[:, :, 0]
-            # U, S, V = svd(weights, full_matrices=False)
-            # rank = 10
-            # reduced_weights = np.dot(U[:, :rank], np.dot(np.diag(S[:rank]), V[:rank, :]))
-            # threshold = np.percentile(np.abs(weights), 50) 
-            # pruned_weights = np.where(np.abs(weights) < threshold, 0, weights)
-            # pruned_magnitudes = np.abs(pruned_weights.mean(axis=0)).tolist()
+            
+            # pca = PCA(n_components=3)  #tole ni kul, more bit 3 namest enke
 
-            # tsne = TSNE(n_components=3, perplexity=1)
-            # reduced_weights = tsne.fit_transform(weights)
-            # selector = SelectKBest(score_func=f_regression, k=10)
-            # selected_weights = selector.fit_transform(weights)
+            # pca = PCA(n_components = "mle", svd_solver ="full")
 
-            weight_magnitudes = np.abs(weights.mean(axis=0)).tolist()
+            #tole rabm sprement tko da  bom dubu povprecja? magnitudov od uteži od vseh nevronov 1-32
+            # pca_weights = pca.fit_transform(weights)
+            # scaled_pca_weights = scaler.fit_transform(pca_weights)
 
-            magnitudes_dict[epoch][layer_index] = weight_magnitudes
-            weights_dict[epoch][layer_index] = scaled_pca_weights.tolist()
+
+            # weight_magnitudes = np.abs(weights.mean(axis=0)).tolist()
+
+            #magnitudes dict je za space vizualisation
+            # magnitudes_dict[epoch][layer_index] = isomap_result.tolist()
+
+            # weight_magnitudes = np.abs(weights.mean(axis=0)).tolist()
+
+            magnitudes_dict[epoch][layer_index] = weight_magnitudes  #ni treba to list, sem že prej, heatmap
+            # weights_dict[epoch][layer_index] = isomap_result #namest scaled pca weights
+            weights_dict[epoch][layer_index] = scaled_sums #ozvezdje
+            # magnitudes_dict[epoch][layer_index] = weight_magnitudes
+            # weights_dict[epoch][layer_index] = scaled_pca_weights.tolist()
             # weights_dict[epoch][layer_index] = weights.tolist()
             # weights_dict[epoch][layer_index] = pruned_magnitudes
             # weights_dict[epoch][layer_index] = weights.flatten().tolist()
         layer_index += 1
+    # stacked = np.vstack(all_matrices)
+
+    # isomap = Isomap(n_neighbors=5, n_components=3)
+    # isomap_result = isomap.fit_transform(stacked)
+    # magnitudes_dict[epoch][layer_index] = isomap_result.tolist()
 
 def activation_callback(epoch, model, inputs, layer_indices, get_activations, pca_dict):
     activations = []
@@ -115,7 +203,7 @@ def activation_callback(epoch, model, inputs, layer_indices, get_activations, pc
 
     pca_activations = []
     for activation in activations:
-        pca = PCA(n_components=1)
+        pca = PCA(n_components=1) #tole je OK
         pca_result = pca.fit_transform(activation)
         pca_activations.append(pca_result)
 
@@ -209,8 +297,8 @@ def generateNetwork(dataset):
     weight_values = np.array(weight_values, dtype=object)
 
     network_params['loss'] = loss_values
-    network_params['all_weights'] = weights_dict
-    network_params['weights'] = magnitudes_dict
+    network_params['all_weights'] = weights_dict #ozvezdje
+    network_params['weights'] = magnitudes_dict #heatmap
     network_params['activations'] = pca_dict
     network_params['neurons'] = neuron_num
     network_params['epochs'] = epochs_num

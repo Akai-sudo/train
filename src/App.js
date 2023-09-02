@@ -77,7 +77,7 @@ export default function App() {
           //localStorage.setItem('data', stringdata);
           setData(data)
           setLayers(data["layers"])
-          setAllWeights(data["all_weights"])
+          setAllWeights(data["all_weights"]) //ozvezdje, utežene vsote vseh
           setNeurons(data["neurons"])
           setWeights(data["weights"])
           setLossData(data["loss"])

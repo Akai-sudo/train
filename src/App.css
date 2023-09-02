@@ -10,6 +10,20 @@
     /* background-image: linear-gradient(to right, #E7842D, #353535); */
   }
 
+  .activations {
+    display: flex;
+    /* flex-direction: row-reverse; */
+    justify-content: center;
+  }
+
+  .layers {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding-right: 55px;
+    font-size: 19px;
+  }
+
   .font-link {
     font-family: 'Satoshi', sans-serif;
   }
@@ -46,6 +60,7 @@
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
+    font-size: 30px;
     /* display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -543,6 +558,21 @@
 
   .heatmap-chart .apexcharts-legend-text {
     color: #E7842D !important;
+  }
+
+  .activations {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .layers {
+    font-size: 19px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: baseline;
+    padding: 10px;
   }
 
   .layout-container {

@@ -71,7 +71,7 @@ const Signal = (props) => {
     const activation_amplitudes = props.activations;
 
     const canvasRef = useRef(null);
-    const [ampl, setAmpl] = useState(0)
+    // const [ampl, setAmpl] = useState(0)
 
     const layer_activations = activation_amplitudes[currentEpoch]; // 3*120
 
@@ -97,157 +97,17 @@ const Signal = (props) => {
     const scaled_amps1 = amplitude_array1.map((value) => (2 * (value - min) / range) - 1);
     const scaled_amps2 = amplitude_array2.map((value) => (2 * (value - min) / range) - 1);
 
-    // min = 0;
-    // max = 100;
-    // range = max - min;
-
-    // scaled_amps = scaled_amps.map((value) => (2 * (value - min) / range) - 1);
-    //const scaled_amps = amplitude_array.map((value) => (10 * value));
-    // console.log("SCALED AMPS", scaled_amps)
-    // console.log(scaled_amps)
-    // const canvasWidth = 200;
-    // const canvasHeight = 400;
-
-    // useEffect(() => {
-    //     const canvas = canvasRef.current;
-    //     const ctx = canvas.getContext("2d");
-    //     // ctx.font = "30px Arial";
-    //     // canvas.width = canvasWidth
-    //     // canvas.height = canvasHeight;
-    //     const color = "#E7842D";
-    //     let time = 0;
-
-
-    //     function animate() {
-
-    //         ctx.lineWidth = 2;
-    //         const frequency = (2 * Math.PI) / canvas.width;
-
-
-
-
-    //         //ctx.save();
-    //         //ctx.translate(0, canvas.height / 2);
-    //         // while (x < canvas.width) {
-
-    //         //     ctx.lineTo(x, y);
-    //         //     x++;
-    //         // }
-    //         // const amps = [10, 1, 10];
-    //         // let rand = Math.random()
-    //         for (let current_amp = 0; current_amp < scaled_amps.length; current_amp++) {
-    //             // let amp = 0;
-    //             // ctx.closePath();
-    //             ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //             ctx.beginPath()
-    //             // ctx.moveTo(0, canvas.height / 2);
-    //             // ctx.lineTo(0, canvas.height / 2);
-    //             let amplitude = 10 * scaled_amps[current_amp];
-    //             // const amplitude = current_amp
-    //             //console.log("AMP", amplitude)
-    //             // amp += 30 * amplitude
-    //             console.log("AMPA", amplitude)
-    //             for (let x = 0; x <= canvas.width; x++) {
-    //                 let amp;
-    //                 if (x < 200) {
-    //                     amp = 50;
-    //                 } else if (x >= 200 && x < 350) {
-    //                     amp = 100;
-    //                 } else if (x >= 350) {
-    //                     amp = 10;
-    //                 }
-    //                 //console.log("TRENUTNA", amplitude)
-    //                 const y = amplitude * Math.cos(frequency * x + time);
-    //                 ctx.lineTo(x, canvas.height * 0.5 - y);
-
-    //                 // const index = x % scaled_amps.length; //tale dela
-    //             }
-    //             // ctx.lineTo(canvas.width, canvas.height / 2);
-
-    //         }
-
-    //         //fill pod wave
-    //         // ctx.lineTo(canvas.width, canvas.height);
-    //         // ctx.lineTo(0, canvas.height);
-    //         // ctx.closePath();
-
-    //         // ctx.fillStyle = "#f8994ca2";
-    //         // ctx.fill();
-
-    //         ctx.strokeStyle = color;
-    //         ctx.stroke()
-    //         // ctx.restore()
-    //         // ctx.closePath();
-    //         time += 0.8
-    //         requestAnimationFrame(animate)
-    //     }
-
-    //     animate();
-
-    //     // for (let w = 0; w < canvas.width; w++) {
-    //     //     const cos = Math.cos(2* Math.PI / canvas.width + time)
-    //     //     ctx.lineTo(w, )
-    //     // }
-    //     // return () => cancelAnimationFrame(animate)
-    //     // cancelAnimationFrame()
-
-    // }, [scaled_amps])
-
-    // useEffect(() => {
-    //     const canvas = canvasRef.current;
-    //     const ctx = canvas.getContext("2d");
-    //     const color = "#E7842D";
-    //     let time = 0;
-
-    //     function animate() {
-    //         ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //         ctx.lineWidth = 2;
-
-    //         const frequency = (2 * Math.PI) / canvas.width;
-    //         const period = scaled_amps.length;
-
-    //         for (let currentPeriod = 0; currentPeriod < period; currentPeriod++) {
-    //             ctx.beginPath();
-    //             ctx.moveTo(0, canvas.height / 2);
-
-    //             const current_amp = scaled_amps[currentPeriod];
-    //             const next_amp = scaled_amps[(currentPeriod + 1) % period];
-
-    //             for (let x = 0; x <= canvas.width; x++) {
-    //                 const t = (x / canvas.width) * (2 * Math.PI);
-    //                 const current_amp = scaled_amps[currentPeriod];
-    //                 const next_amp = scaled_amps[(currentPeriod + 1) % period];
-    //                 const amplitude =
-    //                     current_amp + ((next_amp - current_amp) * t) / (2 * Math.PI);
-    //                 const y = 30 * amplitude * Math.cos(frequency * x + time);
-    //                 ctx.lineTo(x, canvas.height / 2 - y);
-    //             }
-
-    //             ctx.strokeStyle = color;
-    //             ctx.stroke();
-    //         }
-
-    //         time += 1;
-    //         requestAnimationFrame(animate);
-    //     }
-
-    //     animate();
-    // }, [scaled_amps]);
-
-
     useEffect(() => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
         ctx.font = "30px Arial";
         const color = "#E7842D";
         let time = 0;
-        let current = 0;
 
         function animate() {
             time += 0.04;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.beginPath();
-            // ctx.fillText("Hello World", 10, 50);
             for (let cnt = 0; cnt < canvas.width; cnt++) {
                 const index = Math.floor((cnt / ctx.canvas.width) * scaled_amps.length);
 
@@ -261,8 +121,6 @@ const Signal = (props) => {
             }
             ctx.strokeStyle = "#ff9e4a";
             ctx.stroke()
-
-
 
             ctx.beginPath();
             // ctx.fillText("Hello World", 10, 50);
@@ -281,7 +139,6 @@ const Signal = (props) => {
             ctx.stroke();
 
 
-
             ctx.beginPath();
             // ctx.fillText("Hello World", 10, 50);
             for (let cnt = 0; cnt < canvas.width; cnt++) {
@@ -297,18 +154,6 @@ const Signal = (props) => {
             }
             ctx.strokeStyle = "#ff8820";
             ctx.stroke();
-            // if (current === 0) {
-            //     ctx.strokeStyle = "#fff";
-            //     ctx.stroke();
-
-            // } else {
-            //     ctx.strokeStyle = "#fff";
-            //     ctx.stroke();
-            // }
-
-            //ctx.stroke();
-
-
 
             requestAnimationFrame(animate);
         }
@@ -319,71 +164,18 @@ const Signal = (props) => {
     return (
         <>
             {/* <div>Amplitude: {ampl}</div> */}
-            <canvas ref={canvasRef} width={500} height={400} />
+            <div className="activations">
+
+                <div className="layers">
+                    <p>Layer 1</p>
+                    <p>Layer 2</p>
+                    <p>Layer 3</p>
+                </div>
+
+                <canvas ref={canvasRef} width={500} height={400} />
+            </div>
         </>
     );
 };
 
 export default Signal;
-
-
-// const Signal = (props) => {
-
-//     const currentEpoch = props.slider
-//     const activation_amplitudes = props.activations
-
-//     console.log("mja", currentEpoch)
-//     console.log("nja", activation_amplitudes[currentEpoch])
-//     const canvasRef = useRef(null);
-
-//     const frequency = 0.02; // Frekvenca
-//     const layer_activations = activation_amplitudes[currentEpoch]; // Amplituda
-
-//     const aktivacije_layerja = layer_activations[0];
-
-//     const canvasWidth = 700;
-//     const canvasHeight = 300;
-//     const color = "#E7842D";
-
-
-//     useEffect(() => {
-//         const canvas = canvasRef.current;
-
-//         const ctx = canvas.getContext('2d');
-//         let phase = 0;
-
-//         const generateSignal = () => {
-//             const { width, height } = canvas;
-//             ctx.clearRect(0, 0, width, height);
-
-//             ctx.beginPath();
-//             ctx.moveTo(0, height / 2);
-//             ctx.strokeStyle = color;
-
-//             // for (let x = 0; x < width; x++) {
-//             //     const y = 1 * Math.cos(x * frequency + phase) + height / 2;
-//             //     ctx.lineTo(x, y);
-//             // }
-
-//             for (let x = 0; x < width; x++) {
-//                 const y = 4 * Math.cos(x * frequency + phase) + height / 2;
-
-//                 ctx.lineTo(x, y);
-//             }
-
-//             ctx.stroke();
-
-//             phase += 0.05; // hitrost animacije
-//             requestAnimationFrame(generateSignal);
-//         };
-
-//         generateSignal();
-
-//         return () => cancelAnimationFrame(generateSignal);
-//     }, []);
-
-//     return <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight} />;
-// };
-
-// export default Signal;
-

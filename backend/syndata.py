@@ -49,8 +49,8 @@ def generateClass():
     scaled_x = scaler.fit_transform(features_x)
     return scaled_x, labels_y
 
-def generateLine():
-    return (
-        np.round([np.random.uniform(0.3, 0.5) * (x * 3 + 5) for x in range(1000)], 2),
-        range(1000),
-    )
+# def generateLine():
+#     return (
+#         np.round([np.random.uniform(0.3, 0.5) * (x * 3 + 5) for x in range(1000)], 2),
+#         range(1000),
+#     )
