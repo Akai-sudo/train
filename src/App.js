@@ -179,31 +179,38 @@ export default function App() {
       <div className="textContainer">
         <div className="textInfo">
           <h4>Loss Curve</h4><br></br>
-          <p>The loss curve represents the optimisation of error rate throughout all epochs. This is achieved by optimising the loss curve by
-            searching for local minima with gradient descent.
+          <p>The Loss curve represents the process of minimizing the error rate during training of the MLP model. This is achieved by calculating the error by
+            comparing the outputs of neurons with the desired results to evaluate how close the predictions were. The Loss curve gradually converging is the result
+            of using optimizations algorithms like gradient descent to minimize error while training. Based on the curve, we can conclude if our model is overfitting
+            or underfitting the data learned from the dataset. By hovering over the curve we can read the actual loss values that were obtained.
           </p>
         </div>
 
         <div className="textInfo">
           <h4>Heatmap</h4><br></br>
-          <p>The heatmap represents the values of weights for every neuron in every layer. The weight values are a high dimensional tensor so to
-            visualize the importance of weights in 2D we apply a dimensionality reduction method by calculating the weight magnitudes. The weights are then
-            layed out along the X axis, for every layer on the Y axis. The color scale helps us quickly extract which neurons were of
-            significant importance and which weren't.
+          <p>The heatmap represents the values of weight magnitudes of every neuron in every layer. Weights are multi-dimensional tensors, meaning
+            if we want to visualize the importance of weights on a 2D plot we will have to the calculate weight magnitudes, effectively reducing their array dimension.
+            The weights are then layed out along the X axis, for every layer on the Y axis respectively. The color scale helps us quickly extract which neurons were of
+            significant importance based on their magnitude value and color. By using the slider we notice the changes made to weight values.
           </p>
         </div>
 
         <div className="textInfo">
-          <h4>Stars</h4><br></br>
-          <p>The loss curve represents the optimisation of error rate throughout all epochs. This is achieved by optimising the loss curve by
-            searching for local minima with gradient descent.
+          <h4>Space</h4><br></br>
+          <p>This 3D visualization will put you to the starting neurons of both Dense layers. The right is the first layer and the left the second. The orange and blue colored
+            stars represent the average weighted sum of every neuron. These values were scaled to a 0 to 1 interval, and if it yielded an average sum lower than 0.5, the star
+            and its next connecting star line will be colored blue, with lower emission values. Stars with values higher than 0.5 are orange colored and shine brighter. We can easily
+            see how the weighted average sums oscillated and changed for every epoch, generating a beautiful star constellation visualization.
           </p>
         </div>
 
         <div className="textInfo">
-          <h4>Activation signal</h4><br></br>
-          <p>The loss curve represents the optimisation of error rate throughout all epochs. This is achieved by optimising the loss curve by
-            searching for local minima with gradient descent.
+          <h4>Activation Signal</h4><br></br>
+          <p>The Activation Signal is represented as a periodic wave function which it's amplitude is multiplied by activation function (ReLU) constants, obtained during training. Higher activation
+            values typically represent neuron connections of higher importance, meaning our model started to notice prominent patterns within the dataset, resulting in higher amplitude spikes.
+            We have laid out activations for all layers of the model, by changing the slider epoch value we can see how more times neurons were activated with higher values. Different datasets
+            have different sample sizes, resulting in varying densities of our waveform.
+
           </p>
         </div>
       </div>
