@@ -8,7 +8,7 @@ const MoonButton = () => {
 
     return (
         <button className="moon" value="moons" onClick={handleClick}>
-            {/* You can add any content inside the button */}
+            
         </button>
     );
 };
